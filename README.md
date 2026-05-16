@@ -2,6 +2,212 @@
 
 AI-powered Solution Architect that deeply understands your organization's tools, policies, licenses, and constraints.
 
+
+Here are the complete, ready-to-use artifacts for building your MVP using AI Agents (Claude, Cursor, Grok, or multi-agent coding setups).
+
+1. PRODUCT NAME & MVP VISION
+Product Name: ArchAI — Enterprise-Grounded AI Solution Architect
+MVP Tagline: "Give objectives → Get justified, organization-aware HLD/LLD with full traceability and reuse enforcement."
+2. MVP SCOPE (Phase 1 — 6–8 weeks with AI coding)
+In Scope for MVP:
+
+Ingestion of EA data (JSON/Excel + simple API)
+Knowledge Graph + Vector RAG
+Multi-agent workflow for solution design
+Generation of justified HLD (diagrams + document + decision matrix)
+Strong guardrails (reuse, compliance, cost, hallucination)
+Interactive chat + iteration
+Basic web UI
+Audit logging
+
+Out of Scope for MVP:
+
+Full CMDB/ServiceNow integration
+Advanced cost engine with live cloud pricing
+On-prem deployment
+Fine-tuned models
+Multi-user collaboration & approval workflows (basic only)
+
+
+3. TECH STACK (MVP)
+
+Backend: Python 3.11+ + FastAPI
+Agent Orchestration: LangGraph (stateful workflows)
+Knowledge Layer: Neo4j (Graph) + Pinecone / Chroma (Vector) + PostgreSQL
+LLM: Azure OpenAI (GPT-4o / o1) + fallback to Claude 3.5 Sonnet via API
+Frontend: Next.js 15 (App Router) + Tailwind + shadcn/ui
+Diagrams: Mermaid + React Flow (editable)
+Auth: Clerk or NextAuth (SSO ready)
+Observability: LangSmith + Prometheus basics
+
+
+4. PROJECT FOLDER STRUCTURE (Recommended)
+Basharchai-mvp/
+├── backend/
+│   ├── app/
+│   │   ├── agents/               # All agent definitions
+│   │   ├── graph/                # LangGraph workflows
+│   │   ├── tools/                # Custom tools
+│   │   ├── knowledge/            # RAG + Graph services
+│   │   ├── api/                  # FastAPI routes
+│   │   └── core/                 # Guardrails, config
+│   ├── data/                     # Sample data
+│   └── tests/
+├── frontend/
+├── docs/
+│   ├── agents/
+│   ├── architecture/
+│   └── prompts/
+├── knowledge_base/               # Sample EA data
+├── docker-compose.yml
+├── README.md
+└── requirements.txt
+
+5. DETAILED MVP TASK LIST (for AI Coding Agents)
+Epic 1: Foundation & Knowledge Layer
+
+ Setup project structure + Docker
+ Implement Neo4j + Vector DB schema (Systems, DataAssets, Interfaces, Owners, Licenses, Policies, PastDecisions)
+ Data ingestion service (JSON + Excel)
+ RAG pipeline with citation support
+
+Epic 2: Agent Framework
+
+ Create 6 specialized agents with clear roles
+ Build Supervisor/Orchestrator using LangGraph
+ Implement guardrail nodes (reuse, compliance, cost, validation)
+
+Epic 3: Core Workflow
+
+ Objective → Analysis → Design → Critique → Review → Output workflow
+ Structured output (Pydantic models)
+ Justification & Trade-off matrix generation
+
+Epic 4: Artifacts Generation
+
+ Mermaid diagram generation (multiple views)
+ HLD Document generation (Markdown → PDF)
+ Decision Register + Alternatives matrix
+
+Epic 5: Frontend
+
+ Chat interface
+ Upload EA data
+ View / Edit generated artifacts
+ Agent progress visualization
+
+Epic 6: Guardrails & Safety
+
+ Token/cost tracking
+ Citation enforcement
+ Human-in-the-loop checkpoints
+ Audit logging
+
+
+6. AGENT SPECIFICATIONS (MD Files)
+File: docs/agents/01_ORCHESTRATOR_AGENT.md
+Markdown# Orchestrator Agent (Supervisor)
+
+**Role**: Senior Solution Architect + Project Manager
+**Model**: GPT-4o or Claude 3.5 Sonnet (high reasoning)
+
+**Responsibilities**:
+- Understand user objective
+- Create execution plan
+- Coordinate all specialist agents
+- Make final synthesis decision
+- Handle iteration based on user feedback
+- Enforce overall quality and guardrails
+
+**Skills Required**:
+- Strong TOGAF/ArchiMate knowledge
+- Enterprise architecture thinking
+- Multi-agent orchestration
+- Risk assessment
+
+**Input**: User objective + context
+**Output**: Structured plan + final compiled HLD package
+File: docs/agents/02_KNOWLEDGE_AGENT.md
+Markdown# Knowledge & Context Agent
+
+**Role**: Enterprise Memory Expert
+**Primary Tool**: Neo4j Cypher + Vector RAG
+
+**Responsibilities**:
+- Retrieve all relevant systems, interfaces, data assets, licenses, owners
+- Build context packet for other agents
+- Answer "What exists?" questions accurately
+- Flag data ownership and existing feeds
+
+**Guardrail**: Must always cite source nodes. Never hallucinate entities.
+File: docs/agents/03_REUSE_COMPLIANCE_AGENT.md
+Markdown# Reuse & Compliance Agent
+
+**Role**: Security + Architecture Governance Enforcer
+
+**Core Principles to Enforce**:
+1. Reuse before Buy before Build
+2. Minimize new interfaces/feeds
+3. Respect data ownership
+4. Follow security policies
+
+**Output**: Compliance score + list of violations + suggested mitigations
+File: docs/agents/04_TRADEOFF_COST_AGENT.md
+Markdown# Trade-off & Cost Agent
+
+**Role**: Decision Analyst
+
+**Must Consider**:
+- Procured tools & licenses
+- Egress/ingress costs
+- Data residency & compliance
+- Team ownership & skill matrix
+- Security boundaries
+- Maintenance overhead
+
+**Output**: Weighted scoring table + recommendation rationale
+File: docs/agents/05_DESIGN_AGENT.md
+Markdown# Design & Diagram Agent
+
+**Role**: Creative Solution Designer
+
+**Capabilities**:
+- Generate multiple architecture views
+- Produce Mermaid diagrams (C4 model inspired)
+- Suggest integration patterns
+- Generate code skeletons (Terraform, API specs)
+File: docs/agents/06_REVIEWER_AGENT.md
+Markdown# Reviewer / Validator Agent
+
+**Role**: Peer Review + Quality Gate
+
+**Tasks**:
+- Check for hallucinations
+- Validate against all constraints
+- Simulate cross-team objections
+- Assign confidence score (0-100)
+- Suggest improvements
+
+7. SYSTEM PROMPT TEMPLATE (Core)
+File: docs/prompts/BASE_AGENT_PROMPT.md
+MarkdownYou are an expert Solution Architect working for a large enterprise.
+You have deep knowledge of the organization's landscape.
+
+STRICT RULES:
+- Always prefer existing procured tools and systems
+- Justify every major decision with "Why this, why not others"
+- Never suggest new tools without strong, quantified justification
+- Always respect data ownership boundaries
+- Cite sources from the provided context
+- Think step-by-step and show reasoning
+
+8. NEXT ACTIONS RECOMMENDATION
+I recommend you start by asking your AI coding agent (Claude/Cursor) to:
+
+Create the full project scaffold based on the folder structure above.
+Implement the Knowledge Layer (Neo4j schema + ingestion) first.
+Then build the agents one by one.
+
 ## MVP Features
 - Enterprise Knowledge Graph + RAG
 - Agentic workflow (Orchestrator + 6 specialist agents)
