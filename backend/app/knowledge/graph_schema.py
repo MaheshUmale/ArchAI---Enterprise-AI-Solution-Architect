@@ -1,0 +1,8 @@
+KNOWLEDGE_GRAPH_SCHEMA = """
+// Core Nodes
+CREATE CONSTRAINT system_id IF NOT EXISTS FOR (s:System) REQUIRE s.id IS UNIQUE;
+CREATE CONSTRAINT data_asset_id IF NOT EXISTS FOR (d:DataAsset) REQUIRE d.id IS UNIQUE;
+
+// Relationships
+CREATE CONSTRAINT interface_id IF NOT EXISTS FOR ()-[r:FEEDS]-() REQUIRE r.id IS UNIQUE;
+"""

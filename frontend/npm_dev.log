@@ -1,0 +1,28 @@
+
+> archai-frontend@0.1.0 dev
+> next dev
+
+  ▲ Next.js 15.0.0
+  - Local:        http://localhost:3000
+
+ ✓ Starting...
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
+
+
+   We detected TypeScript in your project and created a tsconfig.json file for you.
+ ✓ Ready in 1643ms
+ ○ Compiling / ...
+ ✓ Compiled / in 4.6s (534 modules)
+ HEAD / 200 in 4909ms
+ GET / 200 in 60ms
+ GET / 200 in 25ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 512ms (523 modules)
+ GET / 404 in 654ms
+ GET /_next/static/css/app/layout.css?v=1778920663295 404 in 20ms
+ GET /_next/static/chunks/main-app.js?v=1778920663295 404 in 36ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 35ms
+ GET / 404 in 23ms
