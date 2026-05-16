@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import List, Dict, Optional
+from typing import List, Dict, Any, Optional
 
 class TradeOffOption(BaseModel):
     option: str
@@ -23,11 +23,11 @@ class HLDDocument(BaseModel):
     high_level_design: str
     diagrams: List[ArchitectureDiagram]
     decision_matrix: List[DecisionMatrix]
-    risks_and_mitigations: List[Dict]
+    risks_and_mitigations: List[Dict[str, Any]]
     compliance_summary: str
     confidence_score: float = Field(ge=0, le=100)
 
 class DesignRequest(BaseModel):
     objective: str
     additional_context: Optional[str] = None
-    constraints: Optional[Dict] = None
+    constraints: Optional[Dict[str, Any]] = None
