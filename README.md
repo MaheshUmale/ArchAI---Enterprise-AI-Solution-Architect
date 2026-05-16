@@ -83,3 +83,8 @@ ArchAI utilizes 6 specialized agents:
 6. **Reviewer**: Provides quality assurance and simulates cross-team critique.
 
 See `docs/agents/` for more details.
+
+## 📖 Documentation
+- [**User Guide**](./docs/USER_GUIDE.md): How to use ArchAI effectively.
+- [**Setup Guide**](./docs/SETUP_GUIDE.md): Technical instructions for developers.
+- [**Agent Specifications**](./docs/agents/): Detailed roles for each AI agent.
