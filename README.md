@@ -88,3 +88,10 @@ See `docs/agents/` for more details.
 - [**User Guide**](./docs/USER_GUIDE.md): How to use ArchAI effectively.
 - [**Setup Guide**](./docs/SETUP_GUIDE.md): Technical instructions for developers.
 - [**Agent Specifications**](./docs/agents/): Detailed roles for each AI agent.
+
+## 🧠 SLM Distillation & Knowledge Foundation
+ArchAI is built for Small Language Model (SLM) distillation (3B-7B parameters) using high-quality synthetic data.
+- [**Master EA Sources**](./docs/references/MASTER-EA-SOURCES.md): 110+ authoritative EA references.
+- [**Generic Guidance**](./docs/guidance/ARCHAI-GENERIC-GUIDANCE.md): Core architectural philosophy.
+- [**Skills Library**](./docs/skills/ARCHAI-GENERIC-SKILLS.md): Explicit architectural capabilities.
+- [**Guardrails**](./docs/guardrails/ARCHAI-GUARDRAILS.md): Non-negotiable safety and quality rules.

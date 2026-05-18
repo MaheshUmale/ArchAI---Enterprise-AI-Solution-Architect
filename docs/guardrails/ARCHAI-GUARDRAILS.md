@@ -1,3 +1,9 @@
+---
+title: ArchAI Guardrails
+category: Safety
+version: 1.0
+---
+
 # ArchAI Guardrails (Non-Negotiable)
 
 These override all other instructions. Enforce in every response for SLM safety & quality.

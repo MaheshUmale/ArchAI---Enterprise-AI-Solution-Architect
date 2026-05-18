@@ -29,6 +29,19 @@ This will launch:
     cd backend
     ```
 
+## 🧠 SLM Distillation Knowledge Foundation
+The foundation for training and distillation is located in:
+- `docs/references/MASTER-EA-SOURCES.md`: The master index of 110+ authoritative sources.
+- `docs/guidance/`: Global architectural guidance.
+- `docs/skills/`: Executable architectural skills.
+- `docs/guardrails/`: Safety and quality guardrails.
+
+### Synthetic Corpus Generation
+Use the provided scripts to generate training data:
+```bash
+python3 scripts/generate_ea_corpus.py --input_dir docs/references --output backend/data/synthetic_corpus.jsonl
+```
+
 2.  **Create a virtual environment**:
     ```bash
     python -m venv venv
