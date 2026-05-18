@@ -41,3 +41,8 @@ postgres_data/
 # IDEs
 .vscode/
 .idea/
+
+# ArchAI Data Artifacts
+backend/data/*.json
+backend/data/*.jsonl
+ingestion.log

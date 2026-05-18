@@ -96,17 +96,29 @@ ArchAI is built for Small Language Model (SLM) distillation (3B-7B parameters) u
 - [**Skills Library**](./docs/skills/ARCHAI-GENERIC-SKILLS.md): Explicit architectural capabilities.
 - [**Guardrails**](./docs/guardrails/ARCHAI-GUARDRAILS.md): Non-negotiable safety and quality rules.
 
-### 🛠 Knowledge & Training Automation
-ArchAI provides tools to manage its EA knowledge base and generate synthetic training data:
+### 🛠 SLM Distillation Pipeline
+ArchAI provides a complete pipeline for high-quality SLM distillation (Continued Pre-training & QLoRA):
 
-1. **Ingest Master Sources**: Parse the markdown index into structured JSON.
+1. **Knowledge Ingestion**: Process the master index and local PDFs/EPUBs into structured text.
    ```bash
-   python3 scripts/ingest_master_sources.py --input docs/references/MASTER-EA-SOURCES.md --output backend/data/master_sources.json
+   # Install processing deps: pip install pdfplumber ebooklib beautifulsoup4 tqdm
+   python3 scripts/ingest_master_sources.py --doc_dir "docs/EA_CLOUD_DESIGN PATTERNS/" --max_pages 20
    ```
 
-2. **Generate EA Corpus**: Create synthetic multi-turn dialogues for SLM distillation.
+2. **Synthetic Corpus Generation**: Create high-quality ShareGPT-formatted dialogues using the ingested knowledge.
    ```bash
-   python3 scripts/generate_ea_corpus.py --input_dir docs/references --count 2 --output backend/data/synthetic_corpus.jsonl
+   python3 scripts/generate_ea_corpus.py --count 5 --output backend/data/synthetic_corpus.jsonl
+   ```
+
+3. **Dataset Validation**: Ensure the generated corpus is ready for training.
+   ```bash
+   python3 scripts/train_slm_config/validate_dataset.py backend/data/synthetic_corpus.jsonl
+   ```
+
+4. **Training (Axolotl)**: Use the provided configuration for QLoRA fine-tuning.
+   ```bash
+   # Use Axolotl with the provided config
+   accelerate launch -m axolotl.cli.train scripts/train_slm_config/axolotl_qlora.yaml
    ```
 
 3. **Download Local References**: Fetch external source content for offline reference.

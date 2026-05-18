@@ -3,7 +3,12 @@ import re
 import json
 import logging
 import argparse
-from typing import List, Dict
+from typing import List, Dict, Any
+import pdfplumber
+import ebooklib
+from ebooklib import epub
+from bs4 import BeautifulSoup
+from tqdm import tqdm
 
 # Setup logging
 logging.basicConfig(
@@ -14,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 class MasterSourceParser:
     """
-    Parses MASTER-EA-SOURCES.md and prepares data for ingestion into Neo4j and vector stores.
+    Parses MASTER-EA-SOURCES.md and prepares data for ingestion.
     """
     def __init__(self, filepath: str):
         self.filepath = filepath
@@ -40,11 +45,9 @@ class MasterSourceParser:
             section_name = lines[0].strip()
             logger.debug(f"Processing section: {section_name}")
 
-            # Find items like: 1. **[Title](URL)**
             current_source = None
 
             for line in lines[1:]:
-                # Match the numbered list item with title and URL
                 item_match = re.match(r'^\d+\.\s+\*\*\[(.*?)\]\((.*?)\)\*\*', line.strip())
                 if item_match:
                     if current_source:
@@ -60,55 +63,131 @@ class MasterSourceParser:
                     }
                     continue
 
-                # Extract metadata from the bullet points following the title
                 if current_source:
-                    # Match Authority
                     auth_match = re.match(r'^\s+-\s+\*Authority\*:\s*(.*)', line)
                     if auth_match:
                         current_source["authority"] = auth_match.group(1).strip()
                         continue
 
-                    # Match Topic
                     topic_match = re.match(r'^\s+-\s+\*Topic\*:\s*(.*)', line)
                     if topic_match:
                         current_source["topic"] = topic_match.group(1).strip()
                         continue
 
-                    # Match Description
                     desc_match = re.match(r'^\s+-\s+\*Description\*:\s*(.*)', line)
                     if desc_match:
                         current_source["description"] = desc_match.group(1).strip()
                         continue
 
-            # Append the last source in the section
             if current_source:
                 self.sources.append(current_source)
 
-        logger.info(f"Successfully parsed {len(self.sources)} sources.")
+        logger.info(f"Successfully parsed {len(self.sources)} sources from index.")
         return self.sources
 
-    def save_json(self, output_path: str):
+class DocumentProcessor:
+    """
+    Processes PDF and EPUB files from a directory.
+    """
+    def __init__(self, directory: str, max_pages: int = 20):
+        self.directory = directory
+        self.processed_docs = []
+        self.max_pages = max_pages
+
+    def clean_text(self, text: str) -> str:
+        # Remove multiple newlines and spaces
+        text = re.sub(r'\s+', ' ', text)
+        # Remove non-printable characters
+        text = "".join(filter(lambda x: x.isprintable() or x == '\n', text))
+        return text.strip()
+
+    def process_pdf(self, filepath: str) -> str:
+        text = ""
         try:
-            os.makedirs(os.path.dirname(output_path), exist_ok=True)
-            with open(output_path, "w", encoding="utf-8") as f:
-                json.dump(self.sources, f, indent=2, ensure_ascii=False)
-            logger.info(f"Saved parsed sources to {output_path}")
+            with pdfplumber.open(filepath) as pdf:
+                pages_to_process = pdf.pages[:self.max_pages] if self.max_pages > 0 else pdf.pages
+                for page in pages_to_process:
+                    page_text = page.extract_text()
+                    if page_text:
+                        text += page_text + "\n"
         except Exception as e:
-            logger.error(f"Failed to save JSON to {output_path}: {e}")
+            logger.error(f"Error processing PDF {filepath}: {e}")
+        return self.clean_text(text)
+
+    def process_epub(self, filepath: str) -> str:
+        text = ""
+        try:
+            book = epub.read_epub(filepath)
+            items = list(book.get_items())
+            doc_items = [item for item in items if item.get_type() == ebooklib.ITEM_DOCUMENT]
+
+            # Process a subset of items to save time/memory
+            items_to_process = doc_items[:10] if self.max_pages > 0 else doc_items
+
+            for item in items_to_process:
+                soup = BeautifulSoup(item.get_content(), 'html.parser')
+                text += soup.get_text() + "\n"
+        except Exception as e:
+            logger.error(f"Error processing EPUB {filepath}: {e}")
+        return self.clean_text(text)
+
+    def process_directory(self) -> List[Dict[str, Any]]:
+        if not os.path.exists(self.directory):
+            logger.warning(f"Directory not found: {self.directory}")
+            return []
+
+        files = [f for f in os.listdir(self.directory) if f.lower().endswith(('.pdf', '.epub'))]
+        logger.info(f"Processing {len(files)} documents from {self.directory} (Max pages/items limit: {self.max_pages})...")
+
+        for filename in tqdm(files, desc="Processing Docs"):
+            filepath = os.path.join(self.directory, filename)
+            content = ""
+            if filename.lower().endswith('.pdf'):
+                content = self.process_pdf(filepath)
+            elif filename.lower().endswith('.epub'):
+                content = self.process_epub(filepath)
+
+            if content:
+                self.processed_docs.append({
+                    "filename": filename,
+                    "content": content,
+                    "source_type": "local_document",
+                    "file_type": "pdf" if filename.lower().endswith('.pdf') else "epub"
+                })
+
+        return self.processed_docs
 
 def main():
-    parser = argparse.ArgumentParser(description="ArchAI Master EA Sources Ingestion Parser")
+    parser = argparse.ArgumentParser(description="ArchAI Master EA Sources Ingestion & Doc Processing")
     parser.add_argument(
-        "--input",
+        "--index",
         type=str,
         default="docs/references/MASTER-EA-SOURCES.md",
         help="Path to the master sources markdown file"
     )
     parser.add_argument(
-        "--output",
+        "--doc_dir",
+        type=str,
+        default="docs/EA_CLOUD_DESIGN PATTERNS/",
+        help="Directory containing PDF/EPUB files"
+    )
+    parser.add_argument(
+        "--output_index",
         type=str,
         default="backend/data/master_sources.json",
-        help="Path to save the generated JSON"
+        help="Path to save the generated index JSON"
+    )
+    parser.add_argument(
+        "--output_docs",
+        type=str,
+        default="backend/data/processed_docs.json",
+        help="Path to save the processed documents JSON"
+    )
+    parser.add_argument(
+        "--max_pages",
+        type=int,
+        default=20,
+        help="Max pages per PDF or items per EPUB to process (0 for unlimited)"
     )
     parser.add_argument(
         "--verbose",
@@ -121,14 +200,25 @@ def main():
     if args.verbose:
         logger.setLevel(logging.DEBUG)
 
-    parser_instance = MasterSourceParser(args.input)
-    sources = parser_instance.parse()
-
+    # 1. Parse Index
+    index_parser = MasterSourceParser(args.index)
+    sources = index_parser.parse()
     if sources:
-        parser_instance.save_json(args.output)
-        logger.info("Ingestion preparation complete.")
-    else:
-        logger.warning("No sources were parsed. Check the input file format.")
+        os.makedirs(os.path.dirname(args.output_index), exist_ok=True)
+        with open(args.output_index, "w", encoding="utf-8") as f:
+            json.dump(sources, f, indent=2, ensure_ascii=False)
+        logger.info(f"Saved parsed sources to {args.output_index}")
+
+    # 2. Process Local Documents
+    doc_processor = DocumentProcessor(args.doc_dir, max_pages=args.max_pages)
+    docs = doc_processor.process_directory()
+    if docs:
+        os.makedirs(os.path.dirname(args.output_docs), exist_ok=True)
+        with open(args.output_docs, "w", encoding="utf-8") as f:
+            json.dump(docs, f, indent=2, ensure_ascii=False)
+        logger.info(f"Saved processed documents to {args.output_docs}")
+
+    logger.info("Ingestion and document processing complete.")
 
 if __name__ == "__main__":
     main()
