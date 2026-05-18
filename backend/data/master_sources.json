@@ -1,6 +1,14 @@
 [
   {
-    "title": "TOGAF\u00ae Standard, 10th Edition",
+    "title": "The Open Group Home",
+    "url": "https://www.opengroup.org/",
+    "authority": "The Open Group",
+    "topic": "Standards Body",
+    "description": "The central governing body for open enterprise standards, including TOGAF and ArchiMate.",
+    "source_type": "official_master_index"
+  },
+  {
+    "title": "TOGAF® Standard, 10th Edition",
     "url": "https://www.opengroup.org/togaf-standard-10th-edition-downloads",
     "authority": "The Open Group",
     "topic": "Enterprise Architecture Framework",
@@ -8,7 +16,7 @@
     "source_type": "official_master_index"
   },
   {
-    "title": "ArchiMate\u00ae 3.2 Specification",
+    "title": "ArchiMate® 3.2 Specification",
     "url": "https://publications.opengroup.org/c220",
     "authority": "The Open Group",
     "topic": "Modeling Language",
@@ -16,11 +24,11 @@
     "source_type": "official_master_index"
   },
   {
-    "title": "Zachman Framework Ontology",
+    "title": "Zachman International",
     "url": "https://www.zachman.com/",
     "authority": "Zachman International",
     "topic": "Enterprise Ontology",
-    "description": "A schema for organizing architectural artifacts that takes into account both who the artifact targets and what particular issue is being addressed.",
+    "description": "The definitive hub for the Zachman Framework ontology and John Zachman’s formal writings.",
     "source_type": "official_master_index"
   },
   {
@@ -28,7 +36,7 @@
     "url": "https://www.iso.org/standard/50508.html",
     "authority": "ISO/IEC/IEEE",
     "topic": "Architecture Description",
-    "description": "Defines requirements on the description of system, software, and enterprise architectures.",
+    "description": "International baseline specs for defining architecture viewpoints and expressions.",
     "source_type": "official_master_index"
   },
   {
@@ -36,15 +44,15 @@
     "url": "https://www.opengroup.org/library",
     "authority": "The Open Group",
     "topic": "Standards Repository",
-    "description": "Central repository for all Open Group standards, guides, and white papers across all domains.",
+    "description": "Central repository for all Open Group standards, guides, and white papers.",
     "source_type": "official_master_index"
   },
   {
-    "title": "BIAN Service Landscape 14.0",
-    "url": "https://bian.org/deliverables/service-landscape/",
+    "title": "BIAN (Banking Industry Architecture Network)",
+    "url": "https://bian.org/",
     "authority": "BIAN",
     "topic": "Banking Industry Architecture",
-    "description": "A standardized banking service landscape that defines the standard business functional boundaries and information assets for the banking industry.",
+    "description": "Standardized framework maps, service landscapes, and banking meta-models.",
     "source_type": "official_master_index"
   },
   {
@@ -52,7 +60,7 @@
     "url": "https://www.tmforum.org/oda/",
     "authority": "TM Forum",
     "topic": "Telecom Transformation",
-    "description": "A blueprint for a new generation of customer-centric, modular, and cloud-native IT and network systems.",
+    "description": "The blueprint for component-driven cloud-native transformations in telecom.",
     "source_type": "official_master_index"
   },
   {
@@ -60,71 +68,87 @@
     "url": "https://www.tmforum.org/resources/standard/etom-business-process-framework/",
     "authority": "TM Forum",
     "topic": "Telecom Process Hierarchy",
-    "description": "The industry standard business process framework for the telecommunications and digital service provider industry.",
+    "description": "Standardized process hierarchy guidelines for digital service providers.",
     "source_type": "official_master_index"
   },
   {
-    "title": "FEAF (Federal Enterprise Architecture Framework)",
+    "title": "Federal Enterprise Architecture Framework (FEAF)",
     "url": "https://www.cio.gov/",
     "authority": "US CIO Council",
     "topic": "Government EA",
-    "description": "Provides a common methodology for information technology acquisition, use, and disposal for the United States Federal Government.",
+    "description": "Public sector enterprise infrastructure guidelines from the US CIO Council.",
     "source_type": "official_master_index"
   },
   {
-    "title": "DoDAF (Department of Defense Architecture Framework)",
+    "title": "DoD Architecture Framework (DoDAF)",
     "url": "https://dodcio.defense.gov/Library/DoD-Architecture-Framework/",
     "authority": "US DoD",
     "topic": "Defense Systems Engineering",
-    "description": "An architecture framework for the United States Department of Defense that provides visualization and data tools for complex systems.",
+    "description": "Official system-of-systems engineering architecture guidance for the US Department of Defense.",
     "source_type": "official_master_index"
   },
   {
-    "title": "AWS Well-Architected Framework - Operational Excellence",
+    "title": "NIST SP 800-160 (Systems Security Engineering)",
+    "url": "https://csrc.nist.gov/publications/detail/sp/800-160/vol-1/rev-1/final",
+    "authority": "NIST",
+    "topic": "Security Engineering",
+    "description": "Institutional guidelines for baking structural trust and security directly into enterprise systems.",
+    "source_type": "official_master_index"
+  },
+  {
+    "title": "AWS Well-Architected Framework",
+    "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/",
+    "authority": "Amazon Web Services",
+    "topic": "Cloud Best Practices",
+    "description": "The primary technical portal detailing the pillars (Security, Reliability, Cost, etc.).",
+    "source_type": "official_master_index"
+  },
+  {
+    "title": "AWS Well-Architected - Operational Excellence",
     "url": "https://docs.aws.amazon.com/wellarchitected/latest/opstool/welcome.html",
     "authority": "Amazon Web Services",
     "topic": "Cloud Operations",
-    "description": "Focusing on running and monitoring systems to deliver business value, and continually improving processes and procedures.",
+    "description": "Focusing on running and monitoring systems to deliver business value.",
     "source_type": "official_master_index"
   },
   {
-    "title": "AWS Well-Architected Framework - Security",
+    "title": "AWS Well-Architected - Security",
     "url": "https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html",
     "authority": "Amazon Web Services",
     "topic": "Cloud Security",
-    "description": "Focusing on protecting information and systems. Key topics include confidentiality and integrity of data, and protecting systems from unauthorized use.",
+    "description": "Focusing on protecting information and systems.",
     "source_type": "official_master_index"
   },
   {
-    "title": "AWS Well-Architected Framework - Reliability",
+    "title": "AWS Well-Architected - Reliability",
     "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html",
     "authority": "Amazon Web Services",
     "topic": "Cloud Reliability",
-    "description": "Ensuring a workload performs its intended function correctly and consistently when it's expected to.",
+    "description": "Ensuring a workload performs its intended function correctly and consistently.",
     "source_type": "official_master_index"
   },
   {
-    "title": "AWS Well-Architected Framework - Performance Efficiency",
+    "title": "AWS Well-Architected - Performance Efficiency",
     "url": "https://docs.aws.amazon.com/wellarchitected/latest/performance-efficiency-pillar/welcome.html",
     "authority": "Amazon Web Services",
     "topic": "Cloud Performance",
-    "description": "Focusing on using IT and computing resources efficiently as demand changes and technologies evolve.",
+    "description": "Using computing resources efficiently as demand changes.",
     "source_type": "official_master_index"
   },
   {
-    "title": "AWS Well-Architected Framework - Cost Optimization",
+    "title": "AWS Well-Architected - Cost Optimization",
     "url": "https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/welcome.html",
     "authority": "Amazon Web Services",
     "topic": "Cloud Cost Management",
-    "description": "Focusing on avoiding unnecessary costs. Key topics include understanding where money is being spent and selecting the right number of resource types.",
+    "description": "Avoiding unnecessary costs and understanding spend.",
     "source_type": "official_master_index"
   },
   {
-    "title": "AWS Well-Architected Framework - Sustainability",
+    "title": "AWS Well-Architected - Sustainability",
     "url": "https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/welcome.html",
     "authority": "Amazon Web Services",
     "topic": "Cloud Sustainability",
-    "description": "Focusing on minimizing the environmental impacts of running cloud workloads.",
+    "description": "Minimizing environmental impacts of running cloud workloads.",
     "source_type": "official_master_index"
   },
   {
@@ -132,7 +156,7 @@
     "url": "https://aws.amazon.com/architecture/",
     "authority": "Amazon Web Services",
     "topic": "Reference Architectures",
-    "description": "Centralized location for all official AWS reference architectures, blueprints, and diagrams.",
+    "description": "Direct directory of verified reference architectures, blueprints, and diagrams.",
     "source_type": "official_master_index"
   },
   {
@@ -140,15 +164,15 @@
     "url": "https://aws.amazon.com/prescriptive-guidance/",
     "authority": "Amazon Web Services",
     "topic": "Strategy Playbooks",
-    "description": "Provides time-tested strategies, guides, and patterns to help accelerate your cloud migration, modernization, and optimization projects.",
+    "description": "Step-by-step strategy playbooks for migration, modernization, and data architecture.",
     "source_type": "official_master_index"
   },
   {
-    "title": "AWS Solutions Reference Architecture (SRA)",
+    "title": "AWS Solutions Reference Architecture (AWS SRA)",
     "url": "https://docs.aws.amazon.com/security/latest/userguide/security-solutions-reference-architecture.html",
     "authority": "Amazon Web Services",
     "topic": "Security Design",
-    "description": "A comprehensive set of architecture diagrams and accompanying documentation to help you design, deploy, and manage AWS security services.",
+    "description": "The standard multi-account security pattern design.",
     "source_type": "official_master_index"
   },
   {
@@ -156,47 +180,7 @@
     "url": "https://www.wellarchitectedlabs.com/",
     "authority": "Amazon Web Services",
     "topic": "Hands-on Experience",
-    "description": "Hands-on labs to help you learn, measure, and build using architectural best practices.",
-    "source_type": "official_master_index"
-  },
-  {
-    "title": "Azure Well-Architected Framework - Reliability",
-    "url": "https://learn.microsoft.com/en-us/azure/well-architected/reliability/",
-    "authority": "Microsoft Azure",
-    "topic": "Cloud Reliability",
-    "description": "The ability of a system to recover from failures and continue to function.",
-    "source_type": "official_master_index"
-  },
-  {
-    "title": "Azure Well-Architected Framework - Security",
-    "url": "https://learn.microsoft.com/en-us/azure/well-architected/security/",
-    "authority": "Microsoft Azure",
-    "topic": "Cloud Security",
-    "description": "Protecting applications and data from threats.",
-    "source_type": "official_master_index"
-  },
-  {
-    "title": "Azure Well-Architected Framework - Cost Optimization",
-    "url": "https://learn.microsoft.com/en-us/azure/well-architected/cost-optimization/",
-    "authority": "Microsoft Azure",
-    "topic": "Cloud Cost Management",
-    "description": "Managing costs to maximize the value delivered.",
-    "source_type": "official_master_index"
-  },
-  {
-    "title": "Azure Well-Architected Framework - Operational Excellence",
-    "url": "https://learn.microsoft.com/en-us/azure/well-architected/operational-excellence/",
-    "authority": "Microsoft Azure",
-    "topic": "Cloud Operations",
-    "description": "Operations processes that keep a system running in production.",
-    "source_type": "official_master_index"
-  },
-  {
-    "title": "Azure Well-Architected Framework - Performance Efficiency",
-    "url": "https://learn.microsoft.com/en-us/azure/well-architected/performance-efficiency/",
-    "authority": "Microsoft Azure",
-    "topic": "Cloud Performance",
-    "description": "The ability of a system to adapt to changes in load.",
+    "description": "Hands-on labs to help you learn and build using best practices.",
     "source_type": "official_master_index"
   },
   {
@@ -204,7 +188,15 @@
     "url": "https://learn.microsoft.com/en-us/azure/architecture/",
     "authority": "Microsoft Azure",
     "topic": "Reference Architectures",
-    "description": "Guidance for designing and building highly scalable, resilient, and manageable applications on Microsoft Azure.",
+    "description": "Entry point for Microsoft's reference architectures and technology decision trees.",
+    "source_type": "official_master_index"
+  },
+  {
+    "title": "Azure Well-Architected Framework Hub",
+    "url": "https://learn.microsoft.com/en-us/azure/well-architected/",
+    "authority": "Microsoft Azure",
+    "topic": "Workload Health",
+    "description": "In-depth checklists covering Azure workload health, performance, and optimization.",
     "source_type": "official_master_index"
   },
   {
@@ -212,111 +204,143 @@
     "url": "https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/",
     "authority": "Microsoft Azure",
     "topic": "Cloud Strategy",
-    "description": "Proven guidance that's designed to help you create and implement the business and technology strategies necessary for your organization to succeed in the cloud.",
+    "description": "Structured strategies bridging business logic with landing zone deployments.",
     "source_type": "official_master_index"
   },
   {
-    "title": "Azure Design Patterns Catalog",
+    "title": "Azure Cloud Design Patterns Catalog",
     "url": "https://learn.microsoft.com/en-us/azure/architecture/patterns/",
     "authority": "Microsoft Azure",
     "topic": "Design Patterns",
-    "description": "A collection of design patterns for building scalable and reliable cloud applications.",
+    "description": "Complete index of cloud infrastructure structural designs (Circuit Breakers, CQRS).",
+    "source_type": "official_master_index"
+  },
+  {
+    "title": "Azure Well-Architected - Reliability",
+    "url": "https://learn.microsoft.com/en-us/azure/well-architected/reliability/",
+    "authority": "Various",
+    "topic": "2. Cloud Architecture & Well-Architected Frameworks",
+    "description": "No description available.",
+    "source_type": "official_master_index"
+  },
+  {
+    "title": "Azure Well-Architected - Security",
+    "url": "https://learn.microsoft.com/en-us/azure/well-architected/security/",
+    "authority": "Various",
+    "topic": "2. Cloud Architecture & Well-Architected Frameworks",
+    "description": "No description available.",
+    "source_type": "official_master_index"
+  },
+  {
+    "title": "Azure Well-Architected - Cost Optimization",
+    "url": "https://learn.microsoft.com/en-us/azure/well-architected/cost-optimization/",
+    "authority": "Various",
+    "topic": "2. Cloud Architecture & Well-Architected Frameworks",
+    "description": "No description available.",
+    "source_type": "official_master_index"
+  },
+  {
+    "title": "Azure Well-Architected - Operational Excellence",
+    "url": "https://learn.microsoft.com/en-us/azure/well-architected/operational-excellence/",
+    "authority": "Various",
+    "topic": "2. Cloud Architecture & Well-Architected Frameworks",
+    "description": "No description available.",
+    "source_type": "official_master_index"
+  },
+  {
+    "title": "Azure Well-Architected - Performance Efficiency",
+    "url": "https://learn.microsoft.com/en-us/azure/well-architected/performance-efficiency/",
+    "authority": "Various",
+    "topic": "2. Cloud Architecture & Well-Architected Frameworks",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "Azure Landing Zones (Enterprise-scale)",
     "url": "https://learn.microsoft.com/en-us/azure/architecture/landing-zones/landing-zone-deploy",
-    "authority": "Microsoft Azure",
-    "topic": "Governance & Foundation",
-    "description": "Architecture and implementation guidance for an Azure environment that's scalable, secure, and resilient.",
-    "source_type": "official_master_index"
-  },
-  {
-    "title": "Azure Reference Architectures",
-    "url": "https://learn.microsoft.com/en-us/azure/architecture/browse/",
-    "authority": "Microsoft Azure",
-    "topic": "Solution Blueprints",
-    "description": "Browse through various solution scenarios and architectures for Azure workloads.",
-    "source_type": "official_master_index"
-  },
-  {
-    "title": "GCP Well-Architected - Operational Excellence",
-    "url": "https://cloud.google.com/architecture/framework/operational-excellence",
-    "authority": "Google Cloud",
-    "topic": "Cloud Operations",
-    "description": "How to design, deploy, and manage workloads to deliver value efficiently.",
-    "source_type": "official_master_index"
-  },
-  {
-    "title": "GCP Well-Architected - Security, Privacy, and Compliance",
-    "url": "https://cloud.google.com/architecture/framework/security",
-    "authority": "Google Cloud",
-    "topic": "Cloud Security",
-    "description": "How to protect your data and workloads in the cloud.",
-    "source_type": "official_master_index"
-  },
-  {
-    "title": "GCP Well-Architected - Reliability",
-    "url": "https://cloud.google.com/architecture/framework/reliability",
-    "authority": "Google Cloud",
-    "topic": "Cloud Reliability",
-    "description": "How to design and operate resilient and highly available workloads.",
-    "source_type": "official_master_index"
-  },
-  {
-    "title": "GCP Well-Architected - Cost Optimization",
-    "url": "https://cloud.google.com/architecture/framework/cost-optimization",
-    "authority": "Google Cloud",
-    "topic": "Cloud Cost Management",
-    "description": "How to maximize the business value of your investment in Google Cloud.",
-    "source_type": "official_master_index"
-  },
-  {
-    "title": "GCP Well-Architected - Performance Optimization",
-    "url": "https://cloud.google.com/architecture/framework/performance-optimization",
-    "authority": "Google Cloud",
-    "topic": "Cloud Performance",
-    "description": "How to design and tune your cloud resources for optimal performance.",
-    "source_type": "official_master_index"
-  },
-  {
-    "title": "GCP Well-Architected - Sustainability",
-    "url": "https://cloud.google.com/architecture/framework/sustainability",
-    "authority": "Google Cloud",
-    "topic": "Cloud Sustainability",
-    "description": "How to build and manage cloud workloads that are environmentally sustainable.",
+    "authority": "Various",
+    "topic": "2. Cloud Architecture & Well-Architected Frameworks",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "Google Cloud Architecture Center",
     "url": "https://cloud.google.com/architecture",
     "authority": "Google Cloud",
-    "topic": "Reference Architectures",
-    "description": "Reference architectures, diagrams, and best practices for building on Google Cloud.",
+    "topic": "Reference Topologies",
+    "description": "Canonical documentation site for GCP reference topologies.",
     "source_type": "official_master_index"
   },
   {
-    "title": "Google Cloud Architecture Framework (Overview)",
+    "title": "Google Cloud Architecture Framework",
     "url": "https://cloud.google.com/architecture/framework",
     "authority": "Google Cloud",
-    "topic": "Cloud Strategy",
-    "description": "An overview of the principles and recommendations for designing a cloud topology that is secure, efficient, resilient, and cost-effective.",
+    "topic": "Best Practices",
+    "description": "Best practices spanning system design, cost optimization, and reliability.",
     "source_type": "official_master_index"
   },
   {
-    "title": "Google SRE Book",
-    "url": "https://sre.google/sre-book/table-of-contents/",
-    "authority": "Google",
-    "topic": "Site Reliability Engineering",
-    "description": "The foundational text that describes how Google runs production systems.",
+    "title": "GCP Well-Architected - Operational Excellence",
+    "url": "https://cloud.google.com/architecture/framework/operational-excellence",
+    "authority": "Various",
+    "topic": "2. Cloud Architecture & Well-Architected Frameworks",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
-    "title": "Google Site Reliability Engineering (SRE) Library",
+    "title": "GCP Well-Architected - Security, Privacy, and Compliance",
+    "url": "https://cloud.google.com/architecture/framework/security",
+    "authority": "Various",
+    "topic": "2. Cloud Architecture & Well-Architected Frameworks",
+    "description": "No description available.",
+    "source_type": "official_master_index"
+  },
+  {
+    "title": "GCP Well-Architected - Reliability",
+    "url": "https://cloud.google.com/architecture/framework/reliability",
+    "authority": "Various",
+    "topic": "2. Cloud Architecture & Well-Architected Frameworks",
+    "description": "No description available.",
+    "source_type": "official_master_index"
+  },
+  {
+    "title": "GCP Well-Architected - Cost Optimization",
+    "url": "https://cloud.google.com/architecture/framework/cost-optimization",
+    "authority": "Various",
+    "topic": "2. Cloud Architecture & Well-Architected Frameworks",
+    "description": "No description available.",
+    "source_type": "official_master_index"
+  },
+  {
+    "title": "GCP Well-Architected - Performance Optimization",
+    "url": "https://cloud.google.com/architecture/framework/performance-optimization",
+    "authority": "Various",
+    "topic": "2. Cloud Architecture & Well-Architected Frameworks",
+    "description": "No description available.",
+    "source_type": "official_master_index"
+  },
+  {
+    "title": "GCP Well-Architected - Sustainability",
+    "url": "https://cloud.google.com/architecture/framework/sustainability",
+    "authority": "Various",
+    "topic": "2. Cloud Architecture & Well-Architected Frameworks",
+    "description": "No description available.",
+    "source_type": "official_master_index"
+  },
+  {
+    "title": "Google SRE Books Library",
     "url": "https://sre.google/books/",
     "authority": "Google",
-    "topic": "Operations Literature",
-    "description": "A collection of books and papers on site reliability engineering from Google.",
+    "topic": "Site Reliability Engineering",
+    "description": "Complete official literature detailing site reliability architectures.",
+    "source_type": "official_master_index"
+  },
+  {
+    "title": "CNCF Interactive Landscape",
+    "url": "https://landscape.cncf.io/",
+    "authority": "CNCF",
+    "topic": "Cloud Native Tooling",
+    "description": "Map of open-source cloud infrastructure tooling.",
     "source_type": "official_master_index"
   },
   {
@@ -324,39 +348,31 @@
     "url": "https://refactoring.guru/design-patterns",
     "authority": "Refactoring.Guru",
     "topic": "GoF Patterns",
-    "description": "A modern and interactive guide to classic software design patterns.",
+    "description": "Clean, interactive breakdown of classic software patterns.",
     "source_type": "official_master_index"
   },
   {
-    "title": "SourceMaking: Design Patterns Catalog",
+    "title": "SourceMaking: Patterns and AntiPatterns",
     "url": "https://sourcemaking.com/design_patterns",
     "authority": "SourceMaking",
     "topic": "Pattern Registry",
-    "description": "Educational registry tracing structural code solutions back to code smells.",
+    "description": "Educational registry tracing structural solutions back to code smells.",
     "source_type": "official_master_index"
   },
   {
-    "title": "Hillside Group Pattern Library",
+    "title": "The Hillside Group Pattern Library",
     "url": "https://hillside.net/patterns",
     "authority": "The Hillside Group",
     "topic": "Patterns History",
-    "description": "The historical academic repository for patterns literature and PLoP conference documentation.",
+    "description": "Historical academic repository for patterns literature.",
     "source_type": "official_master_index"
   },
   {
-    "title": "Microsoft: Cloud Design Patterns",
-    "url": "https://learn.microsoft.com/en-us/azure/architecture/patterns/",
-    "authority": "Microsoft",
-    "topic": "Cloud Infrastructure",
-    "description": "Index of cloud infrastructure structural designs like Circuit Breakers, Valet Key, and CQRS.",
-    "source_type": "official_master_index"
-  },
-  {
-    "title": "Patterns of Enterprise Application Architecture (PoEAA)",
+    "title": "Martin Fowler’s Bliki Catalog",
     "url": "https://martinfowler.com/eaaCatalog/",
     "authority": "Martin Fowler",
-    "topic": "Enterprise Application Architecture",
-    "description": "The online companion to the foundational book on enterprise application architecture.",
+    "topic": "App Architecture",
+    "description": "Companion repository to Patterns of Enterprise Application Architecture.",
     "source_type": "official_master_index"
   },
   {
@@ -364,167 +380,151 @@
     "url": "https://microservices.io/",
     "authority": "Chris Richardson",
     "topic": "Microservice Patterns",
-    "description": "A comprehensive map of distributed microservice patterns like Transactional Outbox, Sagas, and API Gateways.",
+    "description": "Definitive online map of distributed microservice patterns.",
     "source_type": "official_master_index"
   },
   {
-    "title": "Martin Fowler: Microservices Resource Guide",
+    "title": "Martin Fowler’s Microservices Guide",
     "url": "https://martinfowler.com/articles/microservices.html",
-    "authority": "Martin Fowler",
-    "topic": "Microservices Fundamentals",
-    "description": "The original definitive essay establishing microservice architectural boundaries.",
+    "authority": "Various",
+    "topic": "3. Software Design Patterns & Distributed Systems",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
-    "title": "Sam Newman: Building Microservices Resources",
+    "title": "Sam Newman's Domain Resources",
     "url": "https://samnewman.io/",
     "authority": "Sam Newman",
-    "topic": "Microservices Decoupling",
-    "description": "Articles and talks regarding decoupled monolith execution and microservice transitions.",
-    "source_type": "official_master_index"
-  },
-  {
-    "title": "The Twelve-Factor App Manifesto",
-    "url": "https://12factor.net/",
-    "authority": "Heroku/Adam Wiggins",
-    "topic": "Cloud-Native Methodology",
-    "description": "Methodology for engineering modern, clean, and state-free application configurations.",
-    "source_type": "official_master_index"
-  },
-  {
-    "title": "Dapr (Distributed Application Runtime) Architecture",
-    "url": "https://dapr.io/",
-    "authority": "Dapr Community",
-    "topic": "Distributed Runtimes",
-    "description": "Building-block architecture designs for sidecar-driven, language-agnostic service delivery.",
+    "topic": "Decoupled Systems",
+    "description": "Articles and talks regarding decoupled monolith execution.",
     "source_type": "official_master_index"
   },
   {
     "title": "Designing Data-Intensive Applications (DDIA) Github",
     "url": "https://github.com/ept/ddia",
     "authority": "Martin Kleppmann",
-    "topic": "Distributed Databases",
-    "description": "Resource maps and errata for the authoritative text on distributed database internal designs.",
+    "topic": "Data Systems",
+    "description": "Public resource maps for the authoritative text on distributed databases.",
+    "source_type": "official_master_index"
+  },
+  {
+    "title": "Dapr (Distributed Application Runtime) Patterns",
+    "url": "https://dapr.io/",
+    "authority": "Dapr Community",
+    "topic": "Distributed Runtimes",
+    "description": "Open-source building-block architecture designs.",
+    "source_type": "official_master_index"
+  },
+  {
+    "title": "The Twelve-Factor App Manifesto",
+    "url": "https://12factor.net/",
+    "authority": "Adam Wiggins",
+    "topic": "Cloud-Native Methodology",
+    "description": "Foundational methodology for engineering modern, clean applications.",
     "source_type": "official_master_index"
   },
   {
     "title": "Nginx Microservices Reference Architecture",
     "url": "https://www.nginx.com/microservices/",
-    "authority": "F5/Nginx",
-    "topic": "Microservice Delivery",
-    "description": "Blueprint for building and delivering microservices at scale.",
+    "authority": "Various",
+    "topic": "3. Software Design Patterns & Distributed Systems",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "Istio Service Mesh Architecture",
     "url": "https://istio.io/latest/docs/ops/deployment/architecture/",
-    "authority": "Istio Community",
-    "topic": "Service Mesh",
-    "description": "Understanding the control plane and data plane architecture of Istio.",
+    "authority": "Various",
+    "topic": "3. Software Design Patterns & Distributed Systems",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "Linkerd Service Mesh Docs",
     "url": "https://linkerd.io/2.11/overview/architecture/",
-    "authority": "Buoyant/Linkerd",
-    "topic": "Ultra-light Service Mesh",
-    "description": "Architecture of the lightest and fastest service mesh for Kubernetes.",
+    "authority": "Various",
+    "topic": "3. Software Design Patterns & Distributed Systems",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "Envoy Proxy Architecture",
     "url": "https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/arch_overview",
-    "authority": "CNCF/Envoy",
-    "topic": "Network Proxy",
-    "description": "Comprehensive overview of the L7 proxy designed for cloud-native applications.",
+    "authority": "Various",
+    "topic": "3. Software Design Patterns & Distributed Systems",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
-    "title": "Enterprise Integration Patterns (EIP) Catalog",
+    "title": "Enterprise Integration Patterns Official Catalog",
     "url": "https://www.enterpriseintegrationpatterns.com/",
     "authority": "Gregor Hohpe / Bobby Woolf",
     "topic": "Messaging Patterns",
-    "description": "Authoritative dictionary of asynchronous message routing, translation, and endpoints.",
+    "description": "Authoritative dictionary of asynchronous message routing.",
     "source_type": "official_master_index"
   },
   {
-    "title": "Apache Camel EIP Library",
+    "title": "Apache Camel EIP Implementations",
     "url": "https://camel.apache.org/components/next/eips/enterprise-integration-patterns.html",
-    "authority": "Apache Software Foundation",
+    "authority": "Apache",
     "topic": "Programmatic Integration",
-    "description": "Real-world implementations of Gregor Hohpe\u2019s theoretical integration blueprints.",
+    "description": "Real-world execution maps of EIP blueprints.",
     "source_type": "official_master_index"
   },
   {
-    "title": "Spring Integration Reference",
+    "title": "Spring Integration Documentation",
     "url": "https://spring.io/projects/spring-integration",
     "authority": "VMware/Spring",
     "topic": "Event-Driven Apps",
-    "description": "Concrete patterns for building messaging architectures inside Spring applications.",
-    "source_type": "official_master_index"
-  },
-  {
-    "title": "MuleSoft Integration Best Practices",
-    "url": "https://www.mulesoft.com/resources/api/integration-patterns",
-    "authority": "MuleSoft/Salesforce",
-    "topic": "API Integration",
-    "description": "Resource center for enterprise-grade integration and API management patterns.",
+    "description": "Concrete patterns for messaging inside application runtimes.",
     "source_type": "official_master_index"
   },
   {
     "title": "AsyncAPI Specification",
     "url": "https://www.asyncapi.com/",
-    "authority": "AsyncAPI Initiative",
-    "topic": "Event-Driven Specs",
-    "description": "Industrial contract standard for describing event-driven integration fabrics.",
+    "authority": "AsyncAPI",
+    "topic": "Event-Driven Standards",
+    "description": "Standard for describing event-driven integration fabrics.",
     "source_type": "official_master_index"
   },
   {
-    "title": "CloudEvents Specification (CNCF)",
+    "title": "CloudEvents Specification",
     "url": "https://cloudevents.io/",
-    "authority": "Cloud Native Computing Foundation",
-    "topic": "Event Metadata",
-    "description": "Unified scheme standard for event data descriptions across system integrations.",
+    "authority": "CNCF",
+    "topic": "Event Data",
+    "description": "Unified scheme standard for event data descriptions.",
     "source_type": "official_master_index"
   },
   {
     "title": "RESTful API Design Guidelines (Microsoft)",
     "url": "https://learn.microsoft.com/en-us/azure/architecture/best-practices/api-design",
-    "authority": "Microsoft",
-    "topic": "API Design",
-    "description": "Best practices for designing and implementing REST APIs.",
+    "authority": "Various",
+    "topic": "4. Enterprise Integration Patterns (EIP) & Messaging",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "GraphQL Specification",
     "url": "https://spec.graphql.org/",
-    "authority": "GraphQL Foundation",
-    "topic": "Query Language",
-    "description": "Formal specification for GraphQL, a query language for APIs.",
+    "authority": "Various",
+    "topic": "4. Enterprise Integration Patterns (EIP) & Messaging",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "gRPC Documentation & Architecture",
     "url": "https://grpc.io/docs/",
-    "authority": "CNCF/Google",
-    "topic": "High-Performance RPC",
-    "description": "Documentation for gRPC, a modern open-source high performance RPC framework.",
+    "authority": "Various",
+    "topic": "4. Enterprise Integration Patterns (EIP) & Messaging",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "Kafka Documentation (Event Streaming)",
     "url": "https://kafka.apache.org/documentation/",
-    "authority": "Apache Software Foundation",
-    "topic": "Event Streaming",
-    "description": "Authoritative guide for Apache Kafka, a distributed event streaming platform.",
-    "source_type": "official_master_index"
-  },
-  {
-    "title": "NIST SP 800-160 Vol. 1 (Systems Security Engineering)",
-    "url": "https://csrc.nist.gov/publications/detail/sp/800-160/vol-1/rev-1/final",
-    "authority": "NIST",
-    "topic": "Security Engineering",
-    "description": "Institutional guidelines for baking structural trust and security into enterprise systems.",
+    "authority": "Various",
+    "topic": "4. Enterprise Integration Patterns (EIP) & Messaging",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
@@ -532,151 +532,151 @@
     "url": "https://www.nist.gov/cyberframework",
     "authority": "NIST",
     "topic": "Security Governance",
-    "description": "Standards, guidelines, and best practices to manage cybersecurity-related risk.",
+    "description": "Standards to manage cybersecurity-related risk.",
     "source_type": "official_master_index"
   },
   {
     "title": "OWASP Top 10 Project",
     "url": "https://owasp.org/www-project-top-ten/",
-    "authority": "OWASP Foundation",
+    "authority": "OWASP",
     "topic": "Web Security",
-    "description": "Standard awareness document for developers and web application security.",
+    "description": "Standard awareness document for web application security.",
     "source_type": "official_master_index"
   },
   {
     "title": "OWASP Software Assurance Maturity Model (SAMM)",
     "url": "https://owaspsamm.org/",
-    "authority": "OWASP Foundation",
-    "topic": "Security Maturity",
-    "description": "Framework to help organizations formulate and implement a strategy for software security.",
+    "authority": "Various",
+    "topic": "5. Security Engineering & Compliance",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "CIS Controls (Center for Internet Security)",
     "url": "https://www.cisecurity.org/controls",
-    "authority": "CIS",
-    "topic": "Critical Security Controls",
-    "description": "Prioritized set of actions that collectively form a defense-in-depth set of best practices.",
+    "authority": "Various",
+    "topic": "5. Security Engineering & Compliance",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "CISA Zero Trust Maturity Model",
     "url": "https://www.cisa.gov/zero-trust-maturity-model",
-    "authority": "CISA",
-    "topic": "Zero Trust",
-    "description": "Roadmap for federal agencies and other organizations to transition to a zero trust architecture.",
+    "authority": "Various",
+    "topic": "5. Security Engineering & Compliance",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "Google BeyondCorp Whitepapers",
     "url": "https://research.google/pubs/beyondcorp-a-new-approach-to-enterprise-security/",
-    "authority": "Google",
-    "topic": "Zero Trust Implementation",
-    "description": "Whitepapers detailing Google\u2019s implementation of a zero trust security model.",
+    "authority": "Various",
+    "topic": "5. Security Engineering & Compliance",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "Cloud Security Alliance (CSA) Guidance",
     "url": "https://cloudsecurityalliance.org/research/guidance/",
-    "authority": "Cloud Security Alliance",
-    "topic": "Cloud Security Standards",
-    "description": "Comprehensive guidance for critical areas of focus in cloud computing.",
+    "authority": "Various",
+    "topic": "5. Security Engineering & Compliance",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "Microsoft Zero Trust Architecture",
     "url": "https://learn.microsoft.com/en-us/security/zero-trust/zero-trust-overview",
-    "authority": "Microsoft",
-    "topic": "Security Architecture",
-    "description": "Overview and documentation of Microsoft\u2019s vision for zero trust.",
+    "authority": "Various",
+    "topic": "5. Security Engineering & Compliance",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "MITRE ATT&CK Framework",
     "url": "https://attack.mitre.org/",
-    "authority": "MITRE",
-    "topic": "Threat Modeling",
-    "description": "Globally-accessible knowledge base of adversary tactics and techniques based on real-world observations.",
+    "authority": "Various",
+    "topic": "5. Security Engineering & Compliance",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "Data Mesh (Zhamak Dehghani)",
     "url": "https://martinfowler.com/articles/data-mesh-principles.html",
     "authority": "Martin Fowler / Zhamak Dehghani",
-    "topic": "Data Mesh",
-    "description": "The foundational principles of a decentralized, domain-driven data architecture.",
+    "topic": "Decentralized Data",
+    "description": "Foundational principles of decentralized, domain-driven data architecture.",
     "source_type": "official_master_index"
   },
   {
     "title": "Modern Data Stack (MDS) Overview",
     "url": "https://www.google.com/search?q=Modern+Data+Stack+principles",
     "authority": "Various",
-    "topic": "Data Infrastructure",
-    "description": "A collection of tools and technologies used to manage and analyze data in a cloud-native way.",
+    "topic": "6. Data Architecture & Analytics",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "Microsoft Fabric Architecture",
     "url": "https://learn.microsoft.com/en-us/fabric/get-started/microsoft-fabric-architecture",
-    "authority": "Microsoft",
-    "topic": "Unified Analytics",
-    "description": "Architecture of the all-in-one analytics solution for enterprises.",
+    "authority": "Various",
+    "topic": "6. Data Architecture & Analytics",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "Databricks Lakehouse Architecture",
     "url": "https://www.databricks.com/glossary/lakehouse",
-    "authority": "Databricks",
-    "topic": "Data Lakehouse",
-    "description": "Unified data management system that combines the benefits of data lakes and data warehouses.",
+    "authority": "Various",
+    "topic": "6. Data Architecture & Analytics",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "BigQuery Enterprise Data Warehouse Docs",
     "url": "https://cloud.google.com/bigquery/docs/introduction",
-    "authority": "Google Cloud",
-    "topic": "Cloud Data Warehousing",
-    "description": "Documentation for BigQuery, a serverless and cost-effective multi-cloud data warehouse.",
+    "authority": "Various",
+    "topic": "6. Data Architecture & Analytics",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "DAMA-DMBOK (Data Management Body of Knowledge)",
     "url": "https://www.dama.org/cpages/dbok",
-    "authority": "DAMA International",
-    "topic": "Data Management",
-    "description": "The definitive guide to data management best practices.",
+    "authority": "Various",
+    "topic": "6. Data Architecture & Analytics",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "The Data Vault Model",
     "url": "https://datavaultalliance.com/",
-    "authority": "Data Vault Alliance",
-    "topic": "Data Modeling",
-    "description": "A modeling methodology for enterprise data warehouses.",
+    "authority": "Various",
+    "topic": "6. Data Architecture & Analytics",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "Star Schema/Dimensional Modeling (Kimball)",
     "url": "https://www.kimballgroup.com/",
-    "authority": "Kimball Group",
-    "topic": "Dimensional Modeling",
-    "description": "The classical approach to data warehouse modeling.",
+    "authority": "Various",
+    "topic": "6. Data Architecture & Analytics",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "Data Governance Institute (DGI) Framework",
     "url": "https://datagovernance.com/the-dgi-framework/",
-    "authority": "Data Governance Institute",
-    "topic": "Data Governance",
-    "description": "A logical structure for classifying, organizing, and communicating complex data governance activities.",
+    "authority": "Various",
+    "topic": "6. Data Architecture & Analytics",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "Apache Atlas (Data Governance & Metadata)",
     "url": "https://atlas.apache.org/",
-    "authority": "Apache Software Foundation",
-    "topic": "Metadata Management",
-    "description": "Open-source framework for data governance and metadata management.",
+    "authority": "Various",
+    "topic": "6. Data Architecture & Analytics",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
@@ -684,199 +684,239 @@
     "url": "https://c4model.com/",
     "authority": "Simon Brown",
     "topic": "Architecture Visualization",
-    "description": "Standard multi-tiered visualization hierarchy maps (Context, Containers, Components, Code).",
+    "description": "Standard multi-tiered visualization hierarchy maps.",
     "source_type": "official_master_index"
   },
   {
-    "title": "Structurizr (Architecture as Code)",
+    "title": "Structurizr Tooling Hub",
     "url": "https://structurizr.com/",
-    "authority": "Simon Brown",
+    "authority": "Structurizr",
     "topic": "Architecture as Code",
-    "description": "The programmatic, architecture-as-code rendering platform built around the C4 model.",
+    "description": "Programmatic rendering platform built around C4 model.",
     "source_type": "official_master_index"
   },
   {
-    "title": "C4-PlantUML Library",
+    "title": "C4-PlantUML Open Source Project",
     "url": "https://github.com/plantuml-stdlib/C4-PlantUML",
-    "authority": "PlantUML Community",
-    "topic": "Visual Blueprints",
-    "description": "Open macro framework to generate version-controlled C4 blueprints using plaintext.",
+    "authority": "Various",
+    "topic": "7. System Modeling & Documentation Frameworks",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "Mermaid.js Documentation",
     "url": "https://mermaid-js.github.io/mermaid/",
-    "authority": "Mermaid.js Community",
-    "topic": "Markdown Diagrams",
-    "description": "JavaScript-based diagramming and charting tool that renders Markdown-inspired text definitions.",
+    "authority": "Various",
+    "topic": "7. System Modeling & Documentation Frameworks",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "UML 2.5.1 Specification (OMG)",
     "url": "https://www.omg.org/spec/UML/",
-    "authority": "Object Management Group",
-    "topic": "Unified Modeling Language",
-    "description": "The formal specification for the Unified Modeling Language (UML).",
+    "authority": "Various",
+    "topic": "7. System Modeling & Documentation Frameworks",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
-    "title": "arc42 Architecture Template",
+    "title": "The arc42 Architecture Template",
     "url": "https://arc42.org/",
-    "authority": "arc42 Community",
-    "topic": "Documentation Template",
-    "description": "Lightweight markdown/ascii doc framework layout for documenting deep system designs.",
+    "authority": "arc42",
+    "topic": "Documentation Layout",
+    "description": "Industry-standard lightweight framework for documenting system designs.",
     "source_type": "official_master_index"
   },
   {
     "title": "ADR (Architecture Decision Records) Guide",
     "url": "https://adr.github.io/",
-    "authority": "ADR Community",
-    "topic": "Decision Tracking",
-    "description": "Documentation for the pattern of recording important architectural decisions.",
+    "authority": "Various",
+    "topic": "7. System Modeling & Documentation Frameworks",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "Software Engineering Institute (SEI) Library",
     "url": "https://www.sei.cmu.edu/library/",
-    "authority": "Carnegie Mellon University",
-    "topic": "Academic Research",
-    "description": "Technical search engine for verified academic architecture research papers.",
+    "authority": "CMU",
+    "topic": "Architecture Research",
+    "description": "Massive technical search engine for verified academic architecture research.",
     "source_type": "official_master_index"
   },
   {
     "title": "Google Cloud: Architecture Decision Records",
     "url": "https://cloud.google.com/architecture/architecture-decision-records",
-    "authority": "Google Cloud",
-    "topic": "Decision Documentation",
-    "description": "Best practices for maintaining a record of architectural decisions on Google Cloud.",
+    "authority": "Various",
+    "topic": "7. System Modeling & Documentation Frameworks",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "AWS Documentation: Architecture Design Records",
     "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/architectural-decision-records/welcome.html",
-    "authority": "Amazon Web Services",
-    "topic": "Design Tracking",
-    "description": "AWS prescriptive guidance on how to create and manage ADRs.",
+    "authority": "Various",
+    "topic": "7. System Modeling & Documentation Frameworks",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "Google: AI/ML Well-Architected Perspective",
     "url": "https://cloud.google.com/architecture/framework/perspectives/ai-ml",
-    "authority": "Google Cloud",
-    "topic": "AI/ML Architecture",
-    "description": "Specific recommendations for designing and operating AI/ML workloads.",
+    "authority": "Various",
+    "topic": "8. Specialized & Emerging Domains",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "Microsoft: AI & Machine Learning Architecture",
     "url": "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/",
-    "authority": "Microsoft Azure",
-    "topic": "AI Solutions",
-    "description": "Reference architectures and guides for AI and ML on Azure.",
+    "authority": "Various",
+    "topic": "8. Specialized & Emerging Domains",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "MLOps: Continuous Delivery in ML (Google)",
     "url": "https://cloud.google.com/architecture/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning",
-    "authority": "Google Cloud",
-    "topic": "MLOps",
-    "description": "Detailed guide on implementing MLOps on Google Cloud.",
+    "authority": "Various",
+    "topic": "8. Specialized & Emerging Domains",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "AWS Machine Learning Lens",
     "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/welcome.html",
-    "authority": "Amazon Web Services",
-    "topic": "ML Best Practices",
-    "description": "Pillar-specific guidance for machine learning workloads on AWS.",
+    "authority": "Various",
+    "topic": "8. Specialized & Emerging Domains",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "Responsible AI Institute",
     "url": "https://www.responsible.ai/",
-    "authority": "Responsible AI Institute",
-    "topic": "AI Ethics",
-    "description": "Independent non-profit providing tools for certifying responsible AI.",
+    "authority": "Various",
+    "topic": "8. Specialized & Emerging Domains",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "OpenTelemetry Specification",
     "url": "https://opentelemetry.io/docs/specs/",
-    "authority": "Cloud Native Computing Foundation",
-    "topic": "Observability Standards",
-    "description": "The specification for the OpenTelemetry project.",
+    "authority": "Various",
+    "topic": "8. Specialized & Emerging Domains",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "DORA: DevOps Research and Assessment",
     "url": "https://dora.dev/",
-    "authority": "Google / DORA",
-    "topic": "DevOps Metrics",
-    "description": "Research-based methodology for measuring and improving software delivery performance.",
+    "authority": "Various",
+    "topic": "8. Specialized & Emerging Domains",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "Honeycomb: Observability Engineering",
     "url": "https://www.honeycomb.io/observability-engineering-book/",
-    "authority": "Honeycomb.io",
-    "topic": "Modern Observability",
-    "description": "Concepts and best practices for observability engineering.",
+    "authority": "Various",
+    "topic": "8. Specialized & Emerging Domains",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "Prometheus Architecture",
     "url": "https://prometheus.io/docs/introduction/overview/",
-    "authority": "CNCF/Prometheus",
-    "topic": "Metrics Monitoring",
-    "description": "Architectural overview of the Prometheus monitoring system.",
+    "authority": "Various",
+    "topic": "8. Specialized & Emerging Domains",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "Grafana Documentation",
     "url": "https://grafana.com/docs/",
-    "authority": "Grafana Labs",
-    "topic": "Visualization",
-    "description": "Official documentation for Grafana, the open-source dashboarding and visualization platform.",
+    "authority": "Various",
+    "topic": "8. Specialized & Emerging Domains",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "ISO 20022 (Financial Messaging Standard)",
     "url": "https://www.iso20022.org/",
-    "authority": "ISO",
-    "topic": "Financial Standards",
-    "description": "The international standard for financial messaging.",
+    "authority": "Various",
+    "topic": "8. Specialized & Emerging Domains",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "FIDO Alliance (Authentication Standards)",
     "url": "https://fidoalliance.org/specs/",
-    "authority": "FIDO Alliance",
-    "topic": "Authentication",
-    "description": "Modern authentication standards designed to eliminate passwords.",
+    "authority": "Various",
+    "topic": "8. Specialized & Emerging Domains",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "Ethereum Engineering Documentation",
     "url": "https://ethereum.org/en/developers/docs/",
-    "authority": "Ethereum Foundation",
-    "topic": "Blockchain Engineering",
-    "description": "Comprehensive documentation for building on the Ethereum blockchain.",
+    "authority": "Various",
+    "topic": "8. Specialized & Emerging Domains",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "Hyperledger Architecture Working Group",
     "url": "https://wiki.hyperledger.org/display/AWG",
-    "authority": "Linux Foundation / Hyperledger",
-    "topic": "Private Blockchain",
-    "description": "Working group focused on defining the modular architecture for private blockchains.",
+    "authority": "Various",
+    "topic": "8. Specialized & Emerging Domains",
+    "description": "No description available.",
     "source_type": "official_master_index"
   },
   {
     "title": "NIST: Blockchain Technology Overview",
     "url": "https://csrc.nist.gov/publications/detail/nistir/8202/final",
-    "authority": "NIST",
-    "topic": "Blockchain Fundamentals",
-    "description": "Academic overview of blockchain technology and its applications.",
+    "authority": "Various",
+    "topic": "8. Specialized & Emerging Domains",
+    "description": "No description available.",
+    "source_type": "official_master_index"
+  },
+  {
+    "title": "CNCF Landscape Home",
+    "url": "https://landscape.cncf.io/",
+    "authority": "Various",
+    "topic": "9. Additional Authoritative Hubs",
+    "description": "No description available.",
+    "source_type": "official_master_index"
+  },
+  {
+    "title": "The Hillside Group Home",
+    "url": "https://hillside.net/",
+    "authority": "Various",
+    "topic": "9. Additional Authoritative Hubs",
+    "description": "No description available.",
+    "source_type": "official_master_index"
+  },
+  {
+    "title": "Martin Fowler Home",
+    "url": "https://martinfowler.com/",
+    "authority": "Various",
+    "topic": "9. Additional Authoritative Hubs",
+    "description": "No description available.",
+    "source_type": "official_master_index"
+  },
+  {
+    "title": "Chris Richardson's Eventuate",
+    "url": "https://eventuate.io/",
+    "authority": "Various",
+    "topic": "9. Additional Authoritative Hubs",
+    "description": "No description available.",
+    "source_type": "official_master_index"
+  },
+  {
+    "title": "Gregor Hohpe's Architect Elevator",
+    "url": "https://architectelevator.com/",
+    "authority": "Various",
+    "topic": "9. Additional Authoritative Hubs",
+    "description": "No description available.",
     "source_type": "official_master_index"
   }
 ]

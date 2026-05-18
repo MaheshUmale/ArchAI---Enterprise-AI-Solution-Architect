@@ -95,3 +95,21 @@ ArchAI is built for Small Language Model (SLM) distillation (3B-7B parameters) u
 - [**Generic Guidance**](./docs/guidance/ARCHAI-GENERIC-GUIDANCE.md): Core architectural philosophy.
 - [**Skills Library**](./docs/skills/ARCHAI-GENERIC-SKILLS.md): Explicit architectural capabilities.
 - [**Guardrails**](./docs/guardrails/ARCHAI-GUARDRAILS.md): Non-negotiable safety and quality rules.
+
+### 🛠 Knowledge & Training Automation
+ArchAI provides tools to manage its EA knowledge base and generate synthetic training data:
+
+1. **Ingest Master Sources**: Parse the markdown index into structured JSON.
+   ```bash
+   python3 scripts/ingest_master_sources.py --input docs/references/MASTER-EA-SOURCES.md --output backend/data/master_sources.json
+   ```
+
+2. **Generate EA Corpus**: Create synthetic multi-turn dialogues for SLM distillation.
+   ```bash
+   python3 scripts/generate_ea_corpus.py --input_dir docs/references --count 2 --output backend/data/synthetic_corpus.jsonl
+   ```
+
+3. **Download Local References**: Fetch external source content for offline reference.
+   ```bash
+   python3 scripts/download_ea_sources.py
+   ```
