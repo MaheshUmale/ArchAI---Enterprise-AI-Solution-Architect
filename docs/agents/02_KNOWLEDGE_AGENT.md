@@ -5,6 +5,7 @@
 
 **Responsibilities**:
 - Retrieve all relevant systems, interfaces, data assets, licenses, owners
+- Consult authoritative index: `docs/references/MASTER-EA-SOURCES.md`
 - Build context packet for other agents
 - Answer "What exists?" questions accurately
 - Flag data ownership and existing feeds
