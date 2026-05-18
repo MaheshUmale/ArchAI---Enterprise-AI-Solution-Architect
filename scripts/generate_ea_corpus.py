@@ -69,8 +69,10 @@ class EACorpusGenerator:
                     logger.warning(f"Failed to read guidance file {gf}: {e}")
         return guidance
 
-    async def generate_examples(self, context_content: str, source_name: str, num_examples: int = 2):
+    async def generate_examples(self, context_content: str, source_name: str, num_examples: int = 1, multi_turn: bool = True):
         guidance = self.load_guidance()
+
+        turns_instruction = "Generate a multi-turn (3-4 turns) architectural dialogue." if multi_turn else "Generate a single-turn architectural dialogue."
 
         prompt = f"""
         You are the ArchAI Synthetic Data Engine.
@@ -86,18 +88,8 @@ class EACorpusGenerator:
            - ARCHAI:reuse-first (evaluating existing assets)
         3. SOURCE GROUNDING: Base the technical advice on the provided context: {source_name}.
         4. COMPLEXITY: Human should ask complex, multi-layered enterprise questions (e.g., legacy migration, global scale, data mesh).
-        5. FORMAT: Output ONLY a JSON list of objects. Each object has a "conversations" key.
-           Example:
-           [
-             {{
-               "conversations": [
-                 {{"from": "human", "value": "..."}},
-                 {{"from": "gpt", "value": "..."}},
-                 {{"from": "human", "value": "..."}},
-                 {{"from": "gpt", "value": "..."}}
-               ]
-             }}
-           ]
+        5. MULTI-TURN: {turns_instruction} The Human should ask follow-up questions challenging the previous answer or asking for more detail.
+        6. FORMAT: Output ONLY a JSON list of objects. Each object has a "conversations" key.
 
         --- ARCHAI GUIDANCE & SKILLS ---
         {guidance}
@@ -129,73 +121,65 @@ class EACorpusGenerator:
             logger.info(f"Appended {len(data)} examples from {source_name} to {self.output_file}")
         except Exception as e:
             logger.error(f"Failed to parse LLM response as JSON from {source_name}: {e}")
-            # logger.debug(f"Raw Response: {response.content}")
 
 async def main():
     parser = argparse.ArgumentParser(description="ArchAI EA Corpus Generator for SLM Distillation")
-    parser.add_argument(
-        "--master_sources",
-        type=str,
-        default="backend/data/master_sources.json",
-        help="Path to master sources JSON"
-    )
-    parser.add_argument(
-        "--processed_docs",
-        type=str,
-        default="backend/data/processed_docs.json",
-        help="Path to processed docs JSON"
-    )
-    parser.add_argument(
-        "--output",
-        type=str,
-        default="backend/data/synthetic_corpus.jsonl",
-        help="Path to the output JSONL file"
-    )
-    parser.add_argument(
-        "--count",
-        type=int,
-        default=2,
-        help="Number of examples to generate per source"
-    )
-    parser.add_argument(
-        "--append",
-        action="store_true",
-        help="Append to output file instead of overwriting"
-    )
+    parser.add_argument("--master_sources", type=str, default="backend/data/master_sources.json")
+    parser.add_argument("--processed_docs", type=str, default="backend/data/processed_docs.json")
+    parser.add_argument("--output", type=str, default="backend/data/synthetic_corpus.jsonl")
+    parser.add_argument("--count", type=int, default=1, help="Number of examples to generate per source")
+    parser.add_argument("--max_sources", type=int, default=10, help="Limit total sources processed for balancing")
+    parser.add_argument("--append", action="store_true")
 
     args = parser.parse_args()
 
     generator = EACorpusGenerator(args.output)
 
-    # Handle file management
     if not args.append and os.path.exists(args.output):
         logger.info(f"Overwriting existing output file: {args.output}")
         os.remove(args.output)
 
-    # 1. Process Master Index Sources
+    # Balanced Sampling: Master Index
     if os.path.exists(args.master_sources):
         with open(args.master_sources, "r", encoding="utf-8") as f:
             sources = json.load(f)
-            # Pick a sample if too many, or process all.
-            # For demonstration, we'll take a few.
-            sample_sources = random.sample(sources, min(len(sources), 5))
-            for src in sample_sources:
-                content = f"Title: {src['title']}\nTopic: {src['topic']}\nDescription: {src['description']}\nURL: {src['url']}"
-                await generator.generate_examples(content, src['title'], args.count)
+            # Group by topic for better coverage
+            by_topic = {}
+            for s in sources:
+                topic = s.get('topic', 'General')
+                if topic not in by_topic: by_topic[topic] = []
+                by_topic[topic].append(s)
 
-    # 2. Process Large Documents
+            # Sample evenly from topics
+            topics = list(by_topic.keys())
+            random.shuffle(topics)
+            processed_count = 0
+
+            while processed_count < args.max_sources // 2 and topics:
+                for topic in topics:
+                    if not by_topic[topic]: continue
+                    src = by_topic[topic].pop(random.randint(0, len(by_topic[topic]) - 1))
+                    content = f"Title: {src['title']}\nTopic: {src['topic']}\nDescription: {src['description']}"
+                    await generator.generate_examples(content, src['title'], args.count)
+                    processed_count += 1
+                    if processed_count >= args.max_sources // 2: break
+                topics = [t for t in topics if by_topic[t]]
+
+    # Balanced Sampling: Large Docs (Chunks)
     if os.path.exists(args.processed_docs):
         with open(args.processed_docs, "r", encoding="utf-8") as f:
             docs = json.load(f)
-            # Pick a few documents to process
-            sample_docs = random.sample(docs, min(len(docs), 3))
-            for doc in sample_docs:
-                # Take a random chunk if doc is very large
-                content = doc['content']
-                if len(content) > 10000:
-                    start = random.randint(0, len(content) - 10000)
-                    content = content[start:start+10000]
-                await generator.generate_examples(content, doc['filename'], args.count)
+            random.shuffle(docs)
+            processed_count = 0
+
+            for doc in docs:
+                if processed_count >= args.max_sources // 2: break
+                # Take a random chunk
+                chunks = doc.get('chunks', [])
+                if not chunks: continue
+                chunk = random.choice(chunks)
+                await generator.generate_examples(chunk, doc['title'], args.count)
+                processed_count += 1
 
 if __name__ == "__main__":
     asyncio.run(main())
