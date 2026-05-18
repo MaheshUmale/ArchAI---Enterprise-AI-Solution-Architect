@@ -4,6 +4,7 @@ import json
 import asyncio
 import logging
 import argparse
+import random
 from typing import List, Dict
 
 # Ensure backend directory is in sys.path for standalone execution
@@ -40,8 +41,8 @@ except ImportError:
 
 class EACorpusGenerator:
     """
-    Uses the master index + guidance files to generate high-quality training data
-    for SLM distillation (Continued Pre-training and QLoRA).
+    Uses the master index + processed docs + guidance files to generate high-quality
+    training data for SLM distillation in ShareGPT format.
     """
     def __init__(self, output_file: str):
         self.output_file = output_file
@@ -68,40 +69,43 @@ class EACorpusGenerator:
                     logger.warning(f"Failed to read guidance file {gf}: {e}")
         return guidance
 
-    async def generate_examples(self, source_file: str, num_examples: int = 2):
-        if not os.path.exists(source_file):
-            logger.error(f"Source file {source_file} not found.")
-            return
-
-        logger.info(f"Generating synthetic corpus from {source_file}...")
-        try:
-            with open(source_file, "r", encoding="utf-8") as f:
-                content = f.read()
-        except Exception as e:
-            logger.error(f"Failed to read source file {source_file}: {e}")
-            return
-
+    async def generate_examples(self, context_content: str, source_name: str, num_examples: int = 2):
         guidance = self.load_guidance()
 
         prompt = f"""
         You are the ArchAI Synthetic Data Engine.
-        Using the following Master EA Sources and Architectural Guidance, generate {num_examples} high-quality,
-        multi-turn dialogues in ShareGPT format.
+        Your task is to generate {num_examples} extremely high-quality, multi-turn architectural dialogues between a Human and ArchAI (the GPT assistant).
 
-        The dialogues must demonstrate:
-        1. Deep architectural reasoning based on the provided sources.
-        2. Proper use of ArchAI skills (e.g., ARCHAI:think-before-architecting, ARCHAI:tradeoff-matrix).
-        3. Strict adherence to ArchAI guardrails (e.g., no hallucinations, bias toward reuse).
-        4. Reference to specific official sources found in the index (e.g., TOGAF, BIAN, AWS WAF).
-        5. Mermaid diagrams and structured JSON deliverables.
+        The dialogues must be in ShareGPT format.
+
+        --- REQUIREMENTS ---
+        1. ASSISTANT ROLE: ArchAI is an expert Enterprise Architect. It must be professional, evidence-based, and surgical.
+        2. SKILLS: ArchAI MUST use specific skills:
+           - ARCHAI:think-before-architecting (internal monologue about trade-offs)
+           - ARCHAI:tradeoff-matrix (structured comparison)
+           - ARCHAI:reuse-first (evaluating existing assets)
+        3. SOURCE GROUNDING: Base the technical advice on the provided context: {source_name}.
+        4. COMPLEXITY: Human should ask complex, multi-layered enterprise questions (e.g., legacy migration, global scale, data mesh).
+        5. FORMAT: Output ONLY a JSON list of objects. Each object has a "conversations" key.
+           Example:
+           [
+             {{
+               "conversations": [
+                 {{"from": "human", "value": "..."}},
+                 {{"from": "gpt", "value": "..."}},
+                 {{"from": "human", "value": "..."}},
+                 {{"from": "gpt", "value": "..."}}
+               ]
+             }}
+           ]
 
         --- ARCHAI GUIDANCE & SKILLS ---
         {guidance}
 
-        --- MASTER SOURCES CONTENT (Context) ---
-        {content[:6000]}
+        --- CONTEXT CONTENT ({source_name}) ---
+        {context_content[:8000]}
 
-        Output ONLY a JSON list of objects. Each object represents one conversation and must have a "conversations" key containing a list of {{"from": "human/gpt", "value": "..."}} objects.
+        Output ONLY valid JSON.
         """
 
         response = await self.llm.ainvoke(prompt)
@@ -122,18 +126,24 @@ class EACorpusGenerator:
             with open(self.output_file, "a", encoding="utf-8") as f:
                 for entry in data:
                     f.write(json.dumps(entry, ensure_ascii=False) + "\n")
-            logger.info(f"Appended {len(data)} examples to {self.output_file}")
+            logger.info(f"Appended {len(data)} examples from {source_name} to {self.output_file}")
         except Exception as e:
-            logger.error(f"Failed to parse LLM response as JSON: {e}")
-            logger.debug(f"Raw Response: {response.content}")
+            logger.error(f"Failed to parse LLM response as JSON from {source_name}: {e}")
+            # logger.debug(f"Raw Response: {response.content}")
 
 async def main():
     parser = argparse.ArgumentParser(description="ArchAI EA Corpus Generator for SLM Distillation")
     parser.add_argument(
-        "--input_dir",
+        "--master_sources",
         type=str,
-        default="docs/references",
-        help="Directory containing source markdown files"
+        default="backend/data/master_sources.json",
+        help="Path to master sources JSON"
+    )
+    parser.add_argument(
+        "--processed_docs",
+        type=str,
+        default="backend/data/processed_docs.json",
+        help="Path to processed docs JSON"
     )
     parser.add_argument(
         "--output",
@@ -145,7 +155,7 @@ async def main():
         "--count",
         type=int,
         default=2,
-        help="Number of examples to generate per file"
+        help="Number of examples to generate per source"
     )
     parser.add_argument(
         "--append",
@@ -162,15 +172,30 @@ async def main():
         logger.info(f"Overwriting existing output file: {args.output}")
         os.remove(args.output)
 
-    source_path = os.path.join(BASE_DIR, args.input_dir)
-    if os.path.isdir(source_path):
-        for filename in os.listdir(source_path):
-            if filename.endswith(".md"):
-                await generator.generate_examples(os.path.join(source_path, filename), args.count)
-    elif os.path.isfile(source_path):
-        await generator.generate_examples(source_path, args.count)
-    else:
-        logger.error(f"Input path not found: {source_path}")
+    # 1. Process Master Index Sources
+    if os.path.exists(args.master_sources):
+        with open(args.master_sources, "r", encoding="utf-8") as f:
+            sources = json.load(f)
+            # Pick a sample if too many, or process all.
+            # For demonstration, we'll take a few.
+            sample_sources = random.sample(sources, min(len(sources), 5))
+            for src in sample_sources:
+                content = f"Title: {src['title']}\nTopic: {src['topic']}\nDescription: {src['description']}\nURL: {src['url']}"
+                await generator.generate_examples(content, src['title'], args.count)
+
+    # 2. Process Large Documents
+    if os.path.exists(args.processed_docs):
+        with open(args.processed_docs, "r", encoding="utf-8") as f:
+            docs = json.load(f)
+            # Pick a few documents to process
+            sample_docs = random.sample(docs, min(len(docs), 3))
+            for doc in sample_docs:
+                # Take a random chunk if doc is very large
+                content = doc['content']
+                if len(content) > 10000:
+                    start = random.randint(0, len(content) - 10000)
+                    content = content[start:start+10000]
+                await generator.generate_examples(content, doc['filename'], args.count)
 
 if __name__ == "__main__":
     asyncio.run(main())

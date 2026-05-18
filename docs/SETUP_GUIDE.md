@@ -36,11 +36,29 @@ The foundation for training and distillation is located in:
 - `docs/skills/`: Executable architectural skills.
 - `docs/guardrails/`: Safety and quality guardrails.
 
-### Synthetic Corpus Generation
-Use the provided scripts to generate training data:
-```bash
-python3 scripts/generate_ea_corpus.py --input_dir docs/references --output backend/data/synthetic_corpus.jsonl
-```
+### SLM Distillation Pipeline
+ArchAI supports Small Language Model (SLM) distillation using a multi-step pipeline:
+
+1.  **Extract Knowledge**: Parse the master index and extract text from local PDF/EPUB documents.
+    ```bash
+    pip install pdfplumber ebooklib beautifulsoup4 tqdm
+    python3 scripts/ingest_master_sources.py --doc_dir "docs/EA_CLOUD_DESIGN PATTERNS/" --max_pages 20
+    ```
+
+2.  **Generate Synthetic Corpus**: Create a high-quality multi-turn dialogue dataset in ShareGPT format.
+    ```bash
+    python3 scripts/generate_ea_corpus.py --count 5 --output backend/data/synthetic_corpus.jsonl
+    ```
+
+3.  **Validate Dataset**: Run the validation script to ensure data quality and format compliance.
+    ```bash
+    python3 scripts/train_slm_config/validate_dataset.py backend/data/synthetic_corpus.jsonl
+    ```
+
+4.  **Fine-tune Model**: Use Axolotl with the provided QLoRA configuration.
+    ```bash
+    accelerate launch -m axolotl.cli.train scripts/train_slm_config/axolotl_qlora.yaml
+    ```
 
 2.  **Create a virtual environment**:
     ```bash
