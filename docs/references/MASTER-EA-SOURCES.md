@@ -8,6 +8,8 @@ authority: 110+ Sources
 
 This is the authoritative master index of 110+ Enterprise Architecture sources, serving as the foundation for the ArchAI Knowledge Agent and SLM distillation corpus.
 
+*Note: All sources are available locally for training and summarization in `knowledge_base/external_references/`.*
+
 ---
 
 ## 1. Enterprise Architecture Frameworks & Standards
