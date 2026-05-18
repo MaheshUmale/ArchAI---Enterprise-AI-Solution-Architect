@@ -1,0 +1,255 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Architecture overview &mdash; envoy 1.39.0-dev-a8d396 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=c8f67d13" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/envoy.css?v=3ec0219e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=4da122e5" />
+
+
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=effd706b"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=db7b0edf"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Introduction" href="intro/intro.html" />
+    <link rel="prev" title="What is Envoy" href="../what_is_envoy.html" />
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DXJEH1ZRXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-DXJEH1ZRXX');
+</script>
+</head>
+
+<body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+          <a href='/docs/envoy/latest/'>
+
+              <img src="../../_static/envoy-logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class='reference internal' href='/docs/envoy/latest/about_docs'>About the documentation</a></li>
+<li class="toctree-l1 current"><a class='reference internal' href='/docs/envoy/latest/intro/intro'>Introduction</a><ul class="current">
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/what_is_envoy'>What is Envoy</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Architecture overview</a><ul>
+<li class="toctree-l3"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/intro/intro'>Introduction</a></li>
+<li class="toctree-l3"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/listeners/listeners_toc'>Listeners</a></li>
+<li class="toctree-l3"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/http/http'>HTTP</a></li>
+<li class="toctree-l3"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/upstream/upstream'>Upstream clusters</a></li>
+<li class="toctree-l3"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/observability/observability'>Observability</a></li>
+<li class="toctree-l3"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/security/security'>Security</a></li>
+<li class="toctree-l3"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/operations/operations'>Operations &amp; configuration</a></li>
+<li class="toctree-l3"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/other_features/other_features'>Other features</a></li>
+<li class="toctree-l3"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/other_protocols/other_protocols'>Other protocols</a></li>
+<li class="toctree-l3"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/advanced/advanced'>Advanced</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/life_of_a_request'>Life of a Request</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/deployment_types/deployment_types'>Deployment types</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/getting_help'>Getting help</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class='reference internal' href='/docs/envoy/latest/start/start'>Getting Started</a></li>
+<li class="toctree-l1"><a class='reference internal' href='/docs/envoy/latest/configuration/configuration'>Configuration reference</a></li>
+<li class="toctree-l1"><a class='reference internal' href='/docs/envoy/latest/operations/operations'>Operations and administration</a></li>
+<li class="toctree-l1"><a class='reference internal' href='/docs/envoy/latest/extending/extending'>Extending Envoy for custom use cases</a></li>
+<li class="toctree-l1"><a class='reference internal' href='/docs/envoy/latest/api/api'>API</a></li>
+<li class="toctree-l1"><a class='reference internal' href='/docs/envoy/latest/faq/overview'>FAQ</a></li>
+<li class="toctree-l1"><a class='reference internal' href='/docs/envoy/latest/version_history/version_history'>Version history</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href='/docs/envoy/latest/'>envoy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a aria-label='Home' class='icon icon-home' href='/docs/envoy/latest/'></a></li>
+          <li class="breadcrumb-item"><a href='/docs/envoy/latest/intro/intro'>Introduction</a></li>
+      <li class="breadcrumb-item active">Architecture overview</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/intro/arch_overview/arch_overview.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+
+  <section id="architecture-overview">
+<h1>Architecture overview<a class="headerlink" href="#architecture-overview" title="Link to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/intro/intro'>Introduction</a><ul>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/intro/terminology'>Terminology</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/intro/threading_model'>Threading model</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/listeners/listeners_toc'>Listeners</a><ul>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/listeners/listeners'>Listeners</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/listeners/listener_filters'>Listener filters</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/http/http'>HTTP</a><ul>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/http/http_connection_management'>HTTP connection management</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/http/http_filters'>HTTP filters</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/http/http_routing'>HTTP routing</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/http/upgrades'>HTTP upgrades</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/http/http_proxy'>HTTP dynamic forward proxy</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/http/http3'>HTTP/3 overview</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/upstream/upstream'>Upstream clusters</a><ul>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/upstream/cluster_manager'>Cluster manager</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/upstream/service_discovery'>Service discovery</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/upstream/dns_resolution'>DNS Resolution</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/upstream/health_checking'>Health checking</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/upstream/connection_pooling'>Connection pooling</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/upstream/load_balancing/load_balancing'>Load Balancing</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/upstream/aggregate_cluster'>Aggregate Cluster</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/upstream/composite_cluster'>Composite cluster</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/upstream/mcp_multicluster'>MCP multi cluster</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/upstream/outlier'>Outlier detection</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/upstream/circuit_breaking'>Circuit breaking</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/upstream/upstream_filters'>Upstream network filters</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/upstream/load_reporting_service'>Load Reporting Service (LRS)</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/upstream/load_balancing_policies'>Load balancing policies</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/observability/observability'>Observability</a><ul>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/observability/statistics'>Statistics</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/observability/access_logging'>Access logging</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/observability/tracing'>Tracing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/security/security'>Security</a><ul>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/security/ssl'>TLS</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/security/jwt_authn_filter'>JSON Web Token (JWT) Authentication</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/security/ext_authz_filter'>External Authorization</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/security/rbac_filter'>Role Based Access Control</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/security/threat_model'>Threat model</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/security/threat_model#extension-security-robust-to-untrusted-downstream-and-upstream'>Extension security: <code class="docutils literal notranslate"><span class="pre">robust_to_untrusted_downstream_and_upstream</span></code></a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/security/threat_model#extension-security-data-plane-agnostic'>Extension security: <code class="docutils literal notranslate"><span class="pre">data_plane_agnostic</span></code></a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/security/threat_model#extension-security-robust-to-untrusted-downstream'>Extension security: <code class="docutils literal notranslate"><span class="pre">robust_to_untrusted_downstream</span></code></a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/security/threat_model#extension-security-requires-trusted-downstream-and-upstream'>Extension security: <code class="docutils literal notranslate"><span class="pre">requires_trusted_downstream_and_upstream</span></code></a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/security/threat_model#extension-security-unknown'>Extension security: <code class="docutils literal notranslate"><span class="pre">unknown</span></code></a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/security/external_deps'>External dependencies</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/security/external_deps#external-dependencies-dataplane-core'>External dependencies: <code class="docutils literal notranslate"><span class="pre">dataplane_core</span></code></a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/security/external_deps#external-dependencies-dataplane-ext'>External dependencies: <code class="docutils literal notranslate"><span class="pre">dataplane_ext</span></code></a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/security/external_deps#external-dependencies-controlplane'>External dependencies: <code class="docutils literal notranslate"><span class="pre">controlplane</span></code></a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/security/external_deps#external-dependencies-api'>External dependencies: <code class="docutils literal notranslate"><span class="pre">api</span></code></a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/security/external_deps#external-dependencies-observability-core'>External dependencies: <code class="docutils literal notranslate"><span class="pre">observability_core</span></code></a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/security/external_deps#external-dependencies-observability-ext'>External dependencies: <code class="docutils literal notranslate"><span class="pre">observability_ext</span></code></a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/security/external_deps#external-dependencies-build'>External dependencies: <code class="docutils literal notranslate"><span class="pre">build</span></code></a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/security/external_deps#external-dependencies-other'>External dependencies: <code class="docutils literal notranslate"><span class="pre">other</span></code></a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/security/external_deps#external-dependencies-test-only'>External dependencies: <code class="docutils literal notranslate"><span class="pre">test_only</span></code></a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/security/google_vrp'>Google Patch Reward Program (PRP)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/operations/operations'>Operations &amp; configuration</a><ul>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/operations/dynamic_configuration'>xDS configuration API overview</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/operations/init'>Initialization</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/operations/draining'>Draining</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/operations/runtime'>Runtime configuration</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/operations/hot_restart'>Hot restart</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/operations/overload_manager'>Overload manager</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/other_features/other_features'>Other features</a><ul>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/other_features/local_rate_limiting'>Local rate limiting</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/other_features/global_rate_limiting'>Global rate limiting</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/other_features/bandwidth_limiting'>Bandwidth limiting</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/other_features/scripting'>Scripting</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/other_features/ip_transparency'>IP Transparency</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/other_features/compression/libraries'>Compression Libraries</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/other_protocols/other_protocols'>Other protocols</a><ul>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/other_protocols/grpc'>gRPC</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/other_protocols/mongo'>MongoDB</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/other_protocols/dynamo'>DynamoDB</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/other_protocols/redis'>Redis</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/other_protocols/postgres'>Postgres</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/advanced/advanced'>Advanced</a><ul>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/advanced/data_sharing_between_filters'>Sharing data between filters</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/advanced/attributes'>Attributes</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/advanced/matching/matching'>Generic Matching</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/advanced/wasm'>Wasm</a></li>
+<li class="toctree-l2"><a class='reference internal' href='/docs/envoy/latest/intro/arch_overview/advanced/dynamic_modules'>Dynamic modules</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a accesskey='p' class='btn btn-neutral float-left' href='/docs/envoy/latest/intro/what_is_envoy' rel='prev' title='What is Envoy'><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a accesskey='n' class='btn btn-neutral float-right' href='/docs/envoy/latest/intro/arch_overview/intro/intro' rel='next' title='Introduction'>Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2016-2026, Envoy Project Authors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+</body>
+</html>
