@@ -47,12 +47,13 @@ ArchAI supports Small Language Model (SLM) distillation using a multi-step pipel
 
 2.  **Generate Synthetic Corpus**: Create a high-quality multi-turn dialogue dataset in ShareGPT format.
     ```bash
-    python3 scripts/generate_ea_corpus.py --count 5 --output backend/data/synthetic_corpus.jsonl
+    python3 scripts/generate_ea_corpus.py --total_count 500 --output backend/data/synthetic_corpus.jsonl
     ```
 
-3.  **Validate Dataset**: Run the validation script to ensure data quality and format compliance.
+3.  **Validate & Evaluate Dataset**: Run validation and evaluation scripts to ensure data quality.
     ```bash
     python3 scripts/train_slm_config/validate_dataset.py backend/data/synthetic_corpus.jsonl
+    python3 scripts/evaluate_slm.py --input backend/data/synthetic_corpus.jsonl
     ```
 
 4.  **Fine-tune Model**: Use Axolotl with the provided QLoRA configuration.

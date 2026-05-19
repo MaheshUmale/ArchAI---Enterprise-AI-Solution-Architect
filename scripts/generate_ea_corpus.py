@@ -29,7 +29,6 @@ except ImportError:
         class MockLLM:
             async def ainvoke(self, prompt):
                 class Resp:
-                    # Provide a realistic sample if dependencies are missing
                     content = json.dumps([{
                         "conversations": [
                             {"from": "human", "value": "How should I design a multi-region data architecture on AWS?"},
@@ -44,8 +43,9 @@ class EACorpusGenerator:
     Uses the master index + processed docs + guidance files to generate high-quality
     training data for SLM distillation in ShareGPT format.
     """
-    def __init__(self, output_file: str):
+    def __init__(self, output_file: str, batch_size: int = 5):
         self.output_file = output_file
+        self.batch_size = batch_size
         try:
             self.llm = get_llm(temperature=0.8)
         except Exception as e:
@@ -98,9 +98,8 @@ class EACorpusGenerator:
         Output ONLY valid JSON.
         """
 
-        response = await self.llm.ainvoke(prompt)
-
         try:
+            response = await self.llm.ainvoke(prompt)
             # Clean the response content
             clean_content = response.content.strip()
             if clean_content.startswith("```json"):
@@ -118,15 +117,15 @@ class EACorpusGenerator:
                     f.write(json.dumps(entry, ensure_ascii=False) + "\n")
             logger.info(f"Appended {len(data)} examples from {source_name} to {self.output_file}")
         except Exception as e:
-            logger.error(f"Failed to parse LLM response as JSON from {source_name}: {e}")
+            logger.error(f"Failed to generate or parse response from {source_name}: {e}")
 
 async def main():
     parser = argparse.ArgumentParser(description="ArchAI EA Corpus Generator for SLM Distillation")
     parser.add_argument("--master_sources", type=str, default="backend/data/master_sources.json")
     parser.add_argument("--processed_docs", type=str, default="backend/data/processed_docs.json")
     parser.add_argument("--output", type=str, default="backend/data/synthetic_corpus.jsonl")
-    parser.add_argument("--count", type=int, default=1, help="Number of examples to generate per source")
-    parser.add_argument("--max_sources", type=int, default=10, help="Limit total sources processed for balancing")
+    parser.add_argument("--total_count", type=int, default=10, help="Total target number of examples")
+    parser.add_argument("--max_sources", type=int, default=50, help="Limit total sources processed for balancing")
     parser.add_argument("--skill", type=str, default=None, help="Focus generation on a specific ArchAI skill")
     parser.add_argument("--append", action="store_true")
 
@@ -138,18 +137,18 @@ async def main():
         logger.info(f"Overwriting existing output file: {args.output}")
         os.remove(args.output)
 
+    all_work = []
+
     # Balanced Sampling: Master Index
     if os.path.exists(args.master_sources):
         with open(args.master_sources, "r", encoding="utf-8") as f:
             sources = json.load(f)
-            # Group by topic for better coverage
             by_topic = {}
             for s in sources:
                 topic = s.get('topic', 'General')
                 if topic not in by_topic: by_topic[topic] = []
                 by_topic[topic].append(s)
 
-            # Sample evenly from topics
             topics = list(by_topic.keys())
             random.shuffle(topics)
             processed_count = 0
@@ -159,7 +158,7 @@ async def main():
                     if not by_topic[topic]: continue
                     src = by_topic[topic].pop(random.randint(0, len(by_topic[topic]) - 1))
                     content = f"Title: {src['title']}\nTopic: {src['topic']}\nDescription: {src['description']}"
-                    await generator.generate_examples(content, src['title'], args.count, skill=args.skill)
+                    all_work.append((content, src['title']))
                     processed_count += 1
                     if processed_count >= args.max_sources // 2: break
                 topics = [t for t in topics if by_topic[t]]
@@ -173,12 +172,28 @@ async def main():
 
             for doc in docs:
                 if processed_count >= args.max_sources // 2: break
-                # Take a random chunk
                 chunks = doc.get('chunks', [])
                 if not chunks: continue
                 chunk = random.choice(chunks)
-                await generator.generate_examples(chunk, doc['title'], args.count, skill=args.skill)
+                all_work.append((chunk, doc['title']))
                 processed_count += 1
+
+    if not all_work:
+        logger.error("No sources or documents found to generate from.")
+        return
+
+    # Calculate examples per source to hit total_count
+    examples_per_source = max(1, args.total_count // len(all_work))
+
+    logger.info(f"Generated a plan for {len(all_work)} sources, ~{examples_per_source} examples each.")
+
+    # Process in batches to avoid overwhelming LLM or rate limits
+    batch_size = 5
+    for i in range(0, len(all_work), batch_size):
+        batch = all_work[i:i+batch_size]
+        tasks = [generator.generate_examples(content, name, examples_per_source, skill=args.skill) for content, name in batch]
+        await asyncio.gather(*tasks)
+        logger.info(f"Processed batch {i//batch_size + 1}/{(len(all_work)-1)//batch_size + 1}")
 
 if __name__ == "__main__":
     asyncio.run(main())

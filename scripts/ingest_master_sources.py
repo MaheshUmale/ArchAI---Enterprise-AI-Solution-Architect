@@ -11,6 +11,12 @@ from ebooklib import epub
 from bs4 import BeautifulSoup
 from tqdm import tqdm
 
+try:
+    from unstructured.partition.pdf import partition_pdf
+    HAS_UNSTRUCTURED = True
+except ImportError:
+    HAS_UNSTRUCTURED = False
+
 # Setup logging
 logging.basicConfig(
     level=logging.INFO,
@@ -90,13 +96,14 @@ class DocumentProcessor:
     """
     Processes PDF and EPUB files with advanced cleaning, chunking, and deduplication.
     """
-    def __init__(self, directory: str, max_pages: int = 50, chunk_size: int = 4000, chunk_overlap: int = 400):
+    def __init__(self, directory: str, max_pages: int = 50, chunk_size: int = 4000, chunk_overlap: int = 400, use_unstructured: bool = True):
         self.directory = directory
         self.processed_docs = []
         self.max_pages = max_pages
         self.chunk_size = chunk_size
         self.chunk_overlap = chunk_overlap
         self.seen_hashes = set()
+        self.use_unstructured = use_unstructured and HAS_UNSTRUCTURED
 
     def clean_text(self, text: str) -> str:
         # 1. Remove common headers/footers patterns (e.g., "Page X of Y", lone numbers at start/end of lines)
@@ -138,22 +145,33 @@ class DocumentProcessor:
 
             # Correctly advance start pointer based on actual end and overlap
             start = end - self.chunk_overlap
+            if start < 0: start = end # Prevent infinite loops if overlap is too large
+            if start >= len(text): break
 
         return chunks
 
     def process_pdf(self, filepath: str) -> Dict[str, Any]:
         text = ""
         metadata = {}
+
+        if self.use_unstructured:
+            logger.info(f"Using Unstructured for {filepath}")
+            try:
+                # Use strategy='fast' or 'hi_res' depending on needs. fast is usually enough for digital PDFs.
+                elements = partition_pdf(filename=filepath, strategy="fast")
+                text = "\n".join([str(el) for el in elements])
+            except Exception as e:
+                logger.warning(f"Unstructured failed for {filepath}: {e}. Falling back to pdfplumber.")
+                text = self._process_pdf_plumber(filepath)
+        else:
+            text = self._process_pdf_plumber(filepath)
+
+        # Attempt to get metadata via pdfplumber regardless of extraction method
         try:
             with pdfplumber.open(filepath) as pdf:
                 metadata = pdf.metadata
-                pages_to_process = pdf.pages[:self.max_pages] if self.max_pages > 0 else pdf.pages
-                for page in pages_to_process:
-                    page_text = page.extract_text()
-                    if page_text:
-                        text += page_text + "\n"
-        except Exception as e:
-            logger.error(f"Error processing PDF {filepath}: {e}")
+        except:
+            pass
 
         cleaned_text = self.clean_text(text)
         chunks = self.chunk_text(cleaned_text)
@@ -164,14 +182,30 @@ class DocumentProcessor:
             "chunks": chunks
         }
 
+    def _process_pdf_plumber(self, filepath: str) -> str:
+        text = ""
+        try:
+            with pdfplumber.open(filepath) as pdf:
+                pages_to_process = pdf.pages[:self.max_pages] if self.max_pages > 0 else pdf.pages
+                for page in pages_to_process:
+                    page_text = page.extract_text()
+                    if page_text:
+                        text += page_text + "\n"
+        except Exception as e:
+            logger.error(f"Error processing PDF with pdfplumber {filepath}: {e}")
+        return text
+
     def process_epub(self, filepath: str) -> Dict[str, Any]:
         text = ""
         title = os.path.basename(filepath)
         author = "Unknown"
         try:
             book = epub.read_epub(filepath)
-            title = book.get_metadata('DC', 'title')[0][0] if book.get_metadata('DC', 'title') else title
-            author = book.get_metadata('DC', 'creator')[0][0] if book.get_metadata('DC', 'creator') else author
+            title_meta = book.get_metadata('DC', 'title')
+            if title_meta: title = title_meta[0][0]
+
+            author_meta = book.get_metadata('DC', 'creator')
+            if author_meta: author = author_meta[0][0]
 
             items = list(book.get_items())
             doc_items = [item for item in items if item.get_type() == ebooklib.ITEM_DOCUMENT]
@@ -180,7 +214,6 @@ class DocumentProcessor:
 
             for item in items_to_process:
                 soup = BeautifulSoup(item.get_content(), 'html.parser')
-                # Remove script and style elements
                 for tag in soup(["script", "style"]):
                     tag.decompose()
                 text += soup.get_text() + "\n"
@@ -202,7 +235,7 @@ class DocumentProcessor:
             return []
 
         files = [f for f in os.listdir(self.directory) if f.lower().endswith(('.pdf', '.epub'))]
-        logger.info(f"Processing {len(files)} docs from {self.directory} (Chunking enabled)...")
+        logger.info(f"Processing {len(files)} docs from {self.directory} (Chunking enabled, Use Unstructured: {self.use_unstructured})...")
 
         for filename in tqdm(files, desc="Processing Docs"):
             filepath = os.path.join(self.directory, filename)
@@ -233,6 +266,7 @@ def main():
     parser.add_argument("--max_pages", type=int, default=50)
     parser.add_argument("--chunk_size", type=int, default=4000)
     parser.add_argument("--overlap", type=int, default=400)
+    parser.add_argument("--no_unstructured", action="store_true", help="Disable Unstructured PDF processing")
     parser.add_argument("--verbose", action="store_true")
 
     args = parser.parse_args()
@@ -254,7 +288,13 @@ def main():
 
     # 2. Process Local Documents with Chunking
     try:
-        doc_processor = DocumentProcessor(args.doc_dir, max_pages=args.max_pages, chunk_size=args.chunk_size, chunk_overlap=args.overlap)
+        doc_processor = DocumentProcessor(
+            args.doc_dir,
+            max_pages=args.max_pages,
+            chunk_size=args.chunk_size,
+            chunk_overlap=args.overlap,
+            use_unstructured=not args.no_unstructured
+        )
         docs = doc_processor.process_directory()
         if docs:
             os.makedirs(os.path.dirname(args.output_docs), exist_ok=True)
