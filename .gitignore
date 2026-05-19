@@ -46,3 +46,4 @@ postgres_data/
 backend/data/*.json
 backend/data/*.jsonl
 ingestion.log
+logs/
