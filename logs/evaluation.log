@@ -1,0 +1,8 @@
+2026-05-19 08:57:15,064 - WARNING - Backend dependencies not found. Using fallback mock LLM.
+2026-05-19 08:57:15,071 - INFO - Evaluating 2 samples...
+2026-05-19 08:57:15,073 - INFO - Evaluation report saved to backend/data/evaluation_report.json
+
+--- SLM Synthetic Data Quality Report ---
+Overall Score: 8.00/10
+Diversity: 0.2222
+Skill Adherence: 8.00/10
