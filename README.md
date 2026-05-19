@@ -107,12 +107,16 @@ ArchAI provides a complete pipeline for high-quality SLM distillation (Continued
 
 2. **Synthetic Corpus Generation**: Create high-quality ShareGPT-formatted dialogues using the ingested knowledge.
    ```bash
-   python3 scripts/generate_ea_corpus.py --count 5 --output backend/data/synthetic_corpus.jsonl
+   python3 scripts/generate_ea_corpus.py --total_count 500 --output backend/data/synthetic_corpus.jsonl
    ```
 
-3. **Dataset Validation**: Ensure the generated corpus is ready for training.
+3. **Dataset Validation & Evaluation**: Ensure the generated corpus is ready for training and score its quality.
    ```bash
+   # Validate format and Mermaid syntax
    python3 scripts/train_slm_config/validate_dataset.py backend/data/synthetic_corpus.jsonl
+
+   # Evaluate quality (LLM-as-a-judge)
+   python3 scripts/evaluate_slm.py --input backend/data/synthetic_corpus.jsonl
    ```
 
 4. **Training (Axolotl)**: Use the provided configuration for QLoRA fine-tuning.
