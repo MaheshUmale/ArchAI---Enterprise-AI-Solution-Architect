@@ -3,6 +3,7 @@ import re
 import json
 import logging
 import argparse
+import hashlib
 from typing import List, Dict, Any
 import pdfplumber
 import ebooklib
@@ -87,24 +88,65 @@ class MasterSourceParser:
 
 class DocumentProcessor:
     """
-    Processes PDF and EPUB files from a directory.
+    Processes PDF and EPUB files with advanced cleaning, chunking, and deduplication.
     """
-    def __init__(self, directory: str, max_pages: int = 20):
+    def __init__(self, directory: str, max_pages: int = 50, chunk_size: int = 4000, chunk_overlap: int = 400):
         self.directory = directory
         self.processed_docs = []
         self.max_pages = max_pages
+        self.chunk_size = chunk_size
+        self.chunk_overlap = chunk_overlap
+        self.seen_hashes = set()
 
     def clean_text(self, text: str) -> str:
-        # Remove multiple newlines and spaces
+        # 1. Remove common headers/footers patterns (e.g., "Page X of Y", lone numbers at start/end of lines)
+        text = re.sub(r'(?m)^\s*\d+\s*$', '', text) # Lone numbers
+        text = re.sub(r'(?i)Page \d+ of \d+', '', text)
+        text = re.sub(r'(?i)Copyright ©.*', '', text)
+
+        # 2. Remove multiple newlines and spaces
         text = re.sub(r'\s+', ' ', text)
-        # Remove non-printable characters
+
+        # 3. Remove non-printable characters
         text = "".join(filter(lambda x: x.isprintable() or x == '\n', text))
+
         return text.strip()
 
-    def process_pdf(self, filepath: str) -> str:
+    def chunk_text(self, text: str) -> List[str]:
+        """Sliding window chunking."""
+        if not text:
+            return []
+
+        chunks = []
+        start = 0
+        while start < len(text):
+            end = start + self.chunk_size
+
+            # Try to snap to nearest space to avoid cutting words
+            if end < len(text):
+                actual_end = text.rfind(' ', start, end)
+                if actual_end > start + (self.chunk_size * 0.7):
+                    end = actual_end
+
+            chunk = text[start:end]
+
+            # Deduplication at chunk level
+            chunk_hash = hashlib.md5(chunk.encode()).hexdigest()
+            if chunk_hash not in self.seen_hashes:
+                chunks.append(chunk.strip())
+                self.seen_hashes.add(chunk_hash)
+
+            # Correctly advance start pointer based on actual end and overlap
+            start = end - self.chunk_overlap
+
+        return chunks
+
+    def process_pdf(self, filepath: str) -> Dict[str, Any]:
         text = ""
+        metadata = {}
         try:
             with pdfplumber.open(filepath) as pdf:
+                metadata = pdf.metadata
                 pages_to_process = pdf.pages[:self.max_pages] if self.max_pages > 0 else pdf.pages
                 for page in pages_to_process:
                     page_text = page.extract_text()
@@ -112,24 +154,47 @@ class DocumentProcessor:
                         text += page_text + "\n"
         except Exception as e:
             logger.error(f"Error processing PDF {filepath}: {e}")
-        return self.clean_text(text)
 
-    def process_epub(self, filepath: str) -> str:
+        cleaned_text = self.clean_text(text)
+        chunks = self.chunk_text(cleaned_text)
+
+        return {
+            "title": metadata.get('Title', os.path.basename(filepath)),
+            "author": metadata.get('Author', 'Unknown'),
+            "chunks": chunks
+        }
+
+    def process_epub(self, filepath: str) -> Dict[str, Any]:
         text = ""
+        title = os.path.basename(filepath)
+        author = "Unknown"
         try:
             book = epub.read_epub(filepath)
+            title = book.get_metadata('DC', 'title')[0][0] if book.get_metadata('DC', 'title') else title
+            author = book.get_metadata('DC', 'creator')[0][0] if book.get_metadata('DC', 'creator') else author
+
             items = list(book.get_items())
             doc_items = [item for item in items if item.get_type() == ebooklib.ITEM_DOCUMENT]
 
-            # Process a subset of items to save time/memory
-            items_to_process = doc_items[:10] if self.max_pages > 0 else doc_items
+            items_to_process = doc_items[:15] if self.max_pages > 0 else doc_items
 
             for item in items_to_process:
                 soup = BeautifulSoup(item.get_content(), 'html.parser')
+                # Remove script and style elements
+                for tag in soup(["script", "style"]):
+                    tag.decompose()
                 text += soup.get_text() + "\n"
         except Exception as e:
             logger.error(f"Error processing EPUB {filepath}: {e}")
-        return self.clean_text(text)
+
+        cleaned_text = self.clean_text(text)
+        chunks = self.chunk_text(cleaned_text)
+
+        return {
+            "title": title,
+            "author": author,
+            "chunks": chunks
+        }
 
     def process_directory(self) -> List[Dict[str, Any]]:
         if not os.path.exists(self.directory):
@@ -137,20 +202,22 @@ class DocumentProcessor:
             return []
 
         files = [f for f in os.listdir(self.directory) if f.lower().endswith(('.pdf', '.epub'))]
-        logger.info(f"Processing {len(files)} documents from {self.directory} (Max pages/items limit: {self.max_pages})...")
+        logger.info(f"Processing {len(files)} docs from {self.directory} (Chunking enabled)...")
 
         for filename in tqdm(files, desc="Processing Docs"):
             filepath = os.path.join(self.directory, filename)
-            content = ""
+            result = None
             if filename.lower().endswith('.pdf'):
-                content = self.process_pdf(filepath)
+                result = self.process_pdf(filepath)
             elif filename.lower().endswith('.epub'):
-                content = self.process_epub(filepath)
+                result = self.process_epub(filepath)
 
-            if content:
+            if result and result["chunks"]:
                 self.processed_docs.append({
                     "filename": filename,
-                    "content": content,
+                    "title": result["title"],
+                    "author": result["author"],
+                    "chunks": result["chunks"],
                     "source_type": "local_document",
                     "file_type": "pdf" if filename.lower().endswith('.pdf') else "epub"
                 })
@@ -158,42 +225,15 @@ class DocumentProcessor:
         return self.processed_docs
 
 def main():
-    parser = argparse.ArgumentParser(description="ArchAI Master EA Sources Ingestion & Doc Processing")
-    parser.add_argument(
-        "--index",
-        type=str,
-        default="docs/references/MASTER-EA-SOURCES.md",
-        help="Path to the master sources markdown file"
-    )
-    parser.add_argument(
-        "--doc_dir",
-        type=str,
-        default="docs/EA_CLOUD_DESIGN PATTERNS/",
-        help="Directory containing PDF/EPUB files"
-    )
-    parser.add_argument(
-        "--output_index",
-        type=str,
-        default="backend/data/master_sources.json",
-        help="Path to save the generated index JSON"
-    )
-    parser.add_argument(
-        "--output_docs",
-        type=str,
-        default="backend/data/processed_docs.json",
-        help="Path to save the processed documents JSON"
-    )
-    parser.add_argument(
-        "--max_pages",
-        type=int,
-        default=20,
-        help="Max pages per PDF or items per EPUB to process (0 for unlimited)"
-    )
-    parser.add_argument(
-        "--verbose",
-        action="store_true",
-        help="Enable debug logging"
-    )
+    parser = argparse.ArgumentParser(description="ArchAI Master EA Sources Ingestion & Advanced Doc Processing")
+    parser.add_argument("--index", type=str, default="docs/references/MASTER-EA-SOURCES.md")
+    parser.add_argument("--doc_dir", type=str, default="docs/EA_CLOUD_DESIGN PATTERNS/")
+    parser.add_argument("--output_index", type=str, default="backend/data/master_sources.json")
+    parser.add_argument("--output_docs", type=str, default="backend/data/processed_docs.json")
+    parser.add_argument("--max_pages", type=int, default=50)
+    parser.add_argument("--chunk_size", type=int, default=4000)
+    parser.add_argument("--overlap", type=int, default=400)
+    parser.add_argument("--verbose", action="store_true")
 
     args = parser.parse_args()
 
@@ -201,24 +241,30 @@ def main():
         logger.setLevel(logging.DEBUG)
 
     # 1. Parse Index
-    index_parser = MasterSourceParser(args.index)
-    sources = index_parser.parse()
-    if sources:
-        os.makedirs(os.path.dirname(args.output_index), exist_ok=True)
-        with open(args.output_index, "w", encoding="utf-8") as f:
-            json.dump(sources, f, indent=2, ensure_ascii=False)
-        logger.info(f"Saved parsed sources to {args.output_index}")
+    try:
+        index_parser = MasterSourceParser(args.index)
+        sources = index_parser.parse()
+        if sources:
+            os.makedirs(os.path.dirname(args.output_index), exist_ok=True)
+            with open(args.output_index, "w", encoding="utf-8") as f:
+                json.dump(sources, f, indent=2, ensure_ascii=False)
+            logger.info(f"Saved parsed sources to {args.output_index}")
+    except Exception as e:
+        logger.error(f"Failed to parse index: {e}")
 
-    # 2. Process Local Documents
-    doc_processor = DocumentProcessor(args.doc_dir, max_pages=args.max_pages)
-    docs = doc_processor.process_directory()
-    if docs:
-        os.makedirs(os.path.dirname(args.output_docs), exist_ok=True)
-        with open(args.output_docs, "w", encoding="utf-8") as f:
-            json.dump(docs, f, indent=2, ensure_ascii=False)
-        logger.info(f"Saved processed documents to {args.output_docs}")
+    # 2. Process Local Documents with Chunking
+    try:
+        doc_processor = DocumentProcessor(args.doc_dir, max_pages=args.max_pages, chunk_size=args.chunk_size, chunk_overlap=args.overlap)
+        docs = doc_processor.process_directory()
+        if docs:
+            os.makedirs(os.path.dirname(args.output_docs), exist_ok=True)
+            with open(args.output_docs, "w", encoding="utf-8") as f:
+                json.dump(docs, f, indent=2, ensure_ascii=False)
+            logger.info(f"Saved processed documents to {args.output_docs}")
+    except Exception as e:
+        logger.error(f"Failed to process documents: {e}")
 
-    logger.info("Ingestion and document processing complete.")
+    logger.info("Ingestion and advanced document processing complete.")
 
 if __name__ == "__main__":
     main()
