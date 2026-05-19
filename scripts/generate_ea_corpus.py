@@ -69,10 +69,11 @@ class EACorpusGenerator:
                     logger.warning(f"Failed to read guidance file {gf}: {e}")
         return guidance
 
-    async def generate_examples(self, context_content: str, source_name: str, num_examples: int = 1, multi_turn: bool = True):
+    async def generate_examples(self, context_content: str, source_name: str, num_examples: int = 1, multi_turn: bool = True, skill: str = None):
         guidance = self.load_guidance()
 
         turns_instruction = "Generate a multi-turn (3-4 turns) architectural dialogue." if multi_turn else "Generate a single-turn architectural dialogue."
+        skill_instruction = f"The dialogue MUST specifically showcase the ArchAI skill: {skill}." if skill else "The dialogue must demonstrate proper use of ArchAI skills (think-before-architecting, tradeoff-matrix, reuse-first)."
 
         prompt = f"""
         You are the ArchAI Synthetic Data Engine.
@@ -82,10 +83,7 @@ class EACorpusGenerator:
 
         --- REQUIREMENTS ---
         1. ASSISTANT ROLE: ArchAI is an expert Enterprise Architect. It must be professional, evidence-based, and surgical.
-        2. SKILLS: ArchAI MUST use specific skills:
-           - ARCHAI:think-before-architecting (internal monologue about trade-offs)
-           - ARCHAI:tradeoff-matrix (structured comparison)
-           - ARCHAI:reuse-first (evaluating existing assets)
+        2. SKILLS: {skill_instruction}
         3. SOURCE GROUNDING: Base the technical advice on the provided context: {source_name}.
         4. COMPLEXITY: Human should ask complex, multi-layered enterprise questions (e.g., legacy migration, global scale, data mesh).
         5. MULTI-TURN: {turns_instruction} The Human should ask follow-up questions challenging the previous answer or asking for more detail.
@@ -129,6 +127,7 @@ async def main():
     parser.add_argument("--output", type=str, default="backend/data/synthetic_corpus.jsonl")
     parser.add_argument("--count", type=int, default=1, help="Number of examples to generate per source")
     parser.add_argument("--max_sources", type=int, default=10, help="Limit total sources processed for balancing")
+    parser.add_argument("--skill", type=str, default=None, help="Focus generation on a specific ArchAI skill")
     parser.add_argument("--append", action="store_true")
 
     args = parser.parse_args()
@@ -160,7 +159,7 @@ async def main():
                     if not by_topic[topic]: continue
                     src = by_topic[topic].pop(random.randint(0, len(by_topic[topic]) - 1))
                     content = f"Title: {src['title']}\nTopic: {src['topic']}\nDescription: {src['description']}"
-                    await generator.generate_examples(content, src['title'], args.count)
+                    await generator.generate_examples(content, src['title'], args.count, skill=args.skill)
                     processed_count += 1
                     if processed_count >= args.max_sources // 2: break
                 topics = [t for t in topics if by_topic[t]]
@@ -178,7 +177,7 @@ async def main():
                 chunks = doc.get('chunks', [])
                 if not chunks: continue
                 chunk = random.choice(chunks)
-                await generator.generate_examples(chunk, doc['title'], args.count)
+                await generator.generate_examples(chunk, doc['title'], args.count, skill=args.skill)
                 processed_count += 1
 
 if __name__ == "__main__":

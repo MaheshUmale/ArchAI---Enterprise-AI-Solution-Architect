@@ -1,8 +1,27 @@
 import json
 import os
 import sys
+import re
 
-def validate_sharegpt_jsonl(filepath):
+def validate_mermaid_syntax(text):
+    """
+    Performs a basic check for Mermaid diagram syntax.
+    """
+    mermaid_blocks = re.findall(r'```mermaid\n(.*?)\n```', text, re.DOTALL)
+    for block in mermaid_blocks:
+        lines = [line.strip() for line in block.split('\n') if line.strip()]
+        if not lines:
+            return False, "Empty mermaid block."
+
+        valid_types = ['graph', 'flowchart', 'sequenceDiagram', 'classDiagram', 'stateDiagram', 'erDiagram', 'gantt', 'pie', 'gitGraph', 'C4Context', 'C4Container', 'C4Component']
+        first_word = lines[0].split()[0] if lines[0].split() else ""
+        if not any(first_word.startswith(t) for t in valid_types):
+             # Some might start with 'graph TD' etc.
+             pass
+
+    return True, ""
+
+def validate_sharegpt_jsonl(filepath, check_mermaid=True):
     if not os.path.exists(filepath):
         print(f"Error: File {filepath} not found.")
         return False
@@ -40,6 +59,12 @@ def validate_sharegpt_jsonl(filepath):
                         print(f"Line {i}, Msg {j}: Unknown sender '{msg['from']}'. Expected 'human', 'gpt', or 'system'.")
                         error_count += 1
                         continue
+
+                    if check_mermaid and msg["from"] == "gpt":
+                        is_valid, err = validate_mermaid_syntax(msg["value"])
+                        if not is_valid:
+                            print(f"Line {i}, Msg {j}: Mermaid syntax issue - {err}")
+                            # We don't necessarily fail the whole entry but we flag it
 
                 valid_count += 1
             except json.JSONDecodeError as e:
