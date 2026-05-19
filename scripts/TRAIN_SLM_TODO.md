@@ -10,13 +10,13 @@ This document outlines the pending tasks and future enhancements for the ArchAI 
 
 ## 🧠 Medium Priority (Data Quality)
 - [x] **Dynamic Multi-turn Logic**: Generate dialogues where the assistant handles follow-up challenges.
-- [ ] **Mermaid Diagram Validation**: Add a validation step to ensure Mermaid diagrams are syntactically correct.
+- [x] **Mermaid Diagram Validation**: Basic syntax check for Mermaid blocks in `validate_dataset.py`.
 - [x] **Topic Coverage Balancing**: Even sampling from master index categories.
-- [ ] **Skill-Specific Training Sets**: Focused datasets for specific ArchAI skills.
+- [x] **Skill-Specific Training Sets**: `--skill` argument in `generate_ea_corpus.py` to focus on specific capabilities.
 
 ## 🚀 Low Priority (Tooling & UX)
 - [x] **Axolotl Wrapper Script**: `scripts/train_slm.sh` to automate validation and training launch.
-- [ ] **Evaluation Framework**: Automated comparison suite against Teacher models.
+- [x] **Evaluation Framework**: Skeleton `scripts/evaluate_slm.py` using LLM-as-a-Judge.
 - [ ] **Inference Sandbox**: Gradio/Streamlit UI for offline testing.
 - [ ] **DVC Integration**: Manage large artifacts without Git.
 
@@ -27,4 +27,7 @@ This document outlines the pending tasks and future enhancements for the ArchAI 
 - [x] Advanced cleaning & sliding-window chunking.
 - [x] Balanced topic sampling.
 - [x] Training wrapper script.
+- [x] Skill-specific generation.
 - [x] Initial Axolotl QLoRA configuration.
+- [x] Mermaid validation.
+- [x] Evaluation framework skeleton.
