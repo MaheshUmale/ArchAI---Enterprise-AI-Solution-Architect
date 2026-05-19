@@ -1,0 +1,7 @@
+2026-05-19 08:57:14,275 - WARNING - Backend dependencies not found. Using fallback mock LLM.
+2026-05-19 08:57:14,293 - INFO - Generated a plan for 4 sources, ~1 examples each.
+2026-05-19 08:57:14,296 - INFO - Appended 1 examples from Google Cloud: Architecture Decision Records to backend/data/synthetic_corpus.jsonl
+2026-05-19 08:57:14,296 - INFO - Appended 1 examples from BIAN (Banking Industry Architecture Network) to backend/data/synthetic_corpus.jsonl
+2026-05-19 08:57:14,297 - INFO - Appended 1 examples from traffic-encryption-options-direct-connect-ra.pdf to backend/data/synthetic_corpus.jsonl
+2026-05-19 08:57:14,297 - INFO - Appended 1 examples from Hybrid DNS Resolution to backend/data/synthetic_corpus.jsonl
+2026-05-19 08:57:14,297 - INFO - Processed batch 1/1
