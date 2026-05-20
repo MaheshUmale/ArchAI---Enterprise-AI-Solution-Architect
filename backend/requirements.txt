@@ -3,6 +3,7 @@ uvicorn[standard]==0.30.0
 langgraph
 langchain
 langchain-openai
+langchain-anthropic
 langchain-community
 neo4j==5.25.0
 pinecone-client==5.0.0
