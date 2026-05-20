@@ -121,10 +121,12 @@ ArchAI provides a complete pipeline for high-quality SLM distillation (Continued
    python3 scripts/evaluate_slm.py --input backend/data/synthetic_corpus.jsonl
    ```
 
-4. **Training (Axolotl)**: Use the provided configuration for QLoRA fine-tuning.
+4. **Training (Axolotl + Unsloth)**: Use the provided configuration for QLoRA fine-tuning (Optimized for Phi-3.5 3.8B).
+   - **Hardware**: Single GPU with 24GB+ VRAM (RTX 3090/4090 or A10) recommended.
+   - **Guide**: See [TRAINING_GUIDE.md](./docs/TRAINING_GUIDE.md) for full details.
    ```bash
-   # Use Axolotl with the provided config
-   accelerate launch -m axolotl.cli.train scripts/train_slm_config/axolotl_qlora.yaml
+   # Launch optimized training
+   bash scripts/train_slm.sh
    ```
 
 3. **Download Local References**: Fetch external source content for offline reference.
