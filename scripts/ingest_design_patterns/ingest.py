@@ -84,6 +84,8 @@ class DesignPatternIngestor:
             return output_file
 
         url = source["url"]
+        parsed_url = urlparse(url)
+
         if url.endswith(".pdf"):
             # Use curl for PDF
             try:
@@ -93,9 +95,9 @@ class DesignPatternIngestor:
             except:
                 return None
 
-        if "github.com" in url:
+        if parsed_url.netloc == "github.com":
             # Maybe just fetch README for now if it's a repo
-            if "/tree/" not in url and "/blob/" not in url:
+            if "/tree/" not in parsed_url.path and "/blob/" not in parsed_url.path:
                 # Append readme path if it's a root repo url
                 raw_url = url.replace("github.com", "raw.githubusercontent.com") + "/master/README.md"
                 content = await self.fetch_url(client, raw_url)
