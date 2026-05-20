@@ -9,10 +9,10 @@ def get_llm(temperature=0.0, model=None):
     otherwise falls back to claude-3-5-sonnet-20240620 if ANTHROPIC_API_KEY is present.
     """
     if model is None:
-        if settings.OPENAI_API_KEY:
-            model = "gpt-4o"
-        elif settings.ANTHROPIC_API_KEY or settings.CLAUDE_API_KEY:
+        if settings.ANTHROPIC_API_KEY or settings.CLAUDE_API_KEY:
             model = "claude-3-5-sonnet-20240620"
+        elif settings.OPENAI_API_KEY:
+            model = "gpt-4o"
         else:
             raise ValueError("No LLM API keys found in environment (OPENAI_API_KEY or ANTHROPIC_API_KEY)")
 
