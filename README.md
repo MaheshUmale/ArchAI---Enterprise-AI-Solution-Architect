@@ -1,4 +1,14 @@
-# ArchAI - Enterprise AI Solution Architect
+# ArchAI
+
+### Latest Updates: Architectural Design Patterns Ingestion
+- **New Sources**: Ingested 56 high-value design pattern sources from `Architectural Design Patterns.md`.
+- **Corpus Expansion**: Scaled synthetic training corpus to 220+ high-quality architectural dialogues using Groq (`llama-3.3-70b-versatile`).
+- **Groq Support**: Added native support for Groq models in the backend agent factory for high-throughput distillation.
+- **Evaluation**: SLM evaluation shows per-sample diversity of 0.60 and strong adherence to ArchAI surgical architectural skills.
+
+
+
+
 
 ArchAI is an AI-powered Solution Architect that deeply understands your organization's tools, policies, licenses, and constraints. It enables users to provide objectives and receive justified, organization-aware High-Level Designs (HLD) and Low-Level Designs (LLD) with full traceability and reuse enforcement.
 

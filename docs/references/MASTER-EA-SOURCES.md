@@ -1,3 +1,235 @@
+
+
+## 10. Architectural Design Patterns
+116. **[10 common architectural patterns](https://towardsdatascience.com/10-common-software-architectural-patterns-in-a-nutshell-a0b47a1e9013)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - General Architecture
+   - *Description*: Architecture patterns from General Architecture catalog.
+117. **[reactive design patterns](https://www.reactivedesignpatterns.com/categories.html)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - General Architecture
+   - *Description*: Architecture patterns from General Architecture catalog.
+118. **[scalable System Design Patterns](https://dzone.com/articles/scalable-system-design)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - General Architecture
+   - *Description*: Architecture patterns from General Architecture catalog.
+119. **[martin fowler](https://martinfowler.com/eaaCatalog)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - General Architecture
+   - *Description*: Architecture patterns from General Architecture catalog.
+120. **[system-design-primer](https://github.com/donnemartin/system-design-primer)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - General Architecture
+   - *Description*: Architecture patterns from General Architecture catalog.
+121. **[architecting-for-reliability](https://medium.com/becloudy/architecting-for-reliability-part-1-concepts-17028343089)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - General Architecture
+   - *Description*: Architecture patterns from General Architecture catalog.
+122. **[InnerSource Patterns](https://patterns.innersourcecommons.org/)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - General Architecture
+   - *Description*: Architecture patterns from General Architecture catalog.
+123. **[Cloud cost hacking](https://hackernoon.com/cloud-cost-hacking-fc35fd19985d)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Cloud Architecture
+   - *Description*: Architecture patterns from Cloud Architecture catalog.
+124. **[AWS cloud design patterns](http://en.clouddesignpattern.org/index.php/Main_Page)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Cloud Architecture
+   - *Description*: Architecture patterns from Cloud Architecture catalog.
+125. **[Azure cloud design patterns](https://docs.microsoft.com/en-us/azure/architecture/patterns)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Cloud Architecture
+   - *Description*: Architecture patterns from Cloud Architecture catalog.
+126. **[cloud computing patterns](http://www.cloudcomputingpatterns.org)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Cloud Architecture
+   - *Description*: Architecture patterns from Cloud Architecture catalog.
+127. **[Google Cloud Solutions](https://gcp.solutions)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Cloud Architecture
+   - *Description*: Architecture patterns from Cloud Architecture catalog.
+128. **[saas tenant isolation strategies](https://d1.awsstatic.com/whitepapers/saas-tenant-isolation-strategies.pdf)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Cloud Architecture
+   - *Description*: Architecture patterns from Cloud Architecture catalog.
+129. **[design patterns for multi-tenancy](https://www.nagarro.com/en/blog/architectural-design-patterns-aws-multi-tenancy)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Cloud Architecture
+   - *Description*: Architecture patterns from Cloud Architecture catalog.
+130. **[serverless architecture](https://thenewstack.io/serverless-architecture-five-design-patterns)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Serverless Architecture
+   - *Description*: Architecture patterns from Serverless Architecture catalog.
+131. **[solving problems in serverless](https://freecontent.manning.com/patterns-for-solving-problems-in-serverless-architectures)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Serverless Architecture
+   - *Description*: Architecture patterns from Serverless Architecture catalog.
+132. **[serverless patterns](https://www.jeremydaly.com/serverless-microservice-patterns-for-aws/)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Serverless Architecture
+   - *Description*: Architecture patterns from Serverless Architecture catalog.
+133. **[serverless-reference-architectures](https://www.jeremydaly.com/serverless-reference-architectures//)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Serverless Architecture
+   - *Description*: Architecture patterns from Serverless Architecture catalog.
+134. **[serverless-patterns-collection](https://serverlessland.com/patterns)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Serverless Architecture
+   - *Description*: Architecture patterns from Serverless Architecture catalog.
+135. **[serverless-design-patterns-and-best-practices](https://www.packtpub.com/free-ebook/serverless-design-patterns-and-best-practices/9781788620642)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Serverless Architecture
+   - *Description*: Architecture patterns from Serverless Architecture catalog.
+136. **[microservices](http://microservices.io/patterns)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Micro services & Distributed Systems
+   - *Description*: Architecture patterns from Micro services & Distributed Systems catalog.
+137. **[microservices-anti patterns](https://www.oreilly.com/ideas/microservices-antipatterns-and-pitfalls)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Micro services & Distributed Systems
+   - *Description*: Architecture patterns from Micro services & Distributed Systems catalog.
+138. **[12factor](https://12factor.net)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Micro services & Distributed Systems
+   - *Description*: Architecture patterns from Micro services & Distributed Systems catalog.
+139. **[microservices-sync-vs-async](https://dzone.com/articles/patterns-for-microservices-sync-vs-async)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Micro services & Distributed Systems
+   - *Description*: Architecture patterns from Micro services & Distributed Systems catalog.
+140. **[message-queues](http://tech.forter.com/comparing-message-queue-architectures-on-aws)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Micro services & Distributed Systems
+   - *Description*: Architecture patterns from Micro services & Distributed Systems catalog.
+141. **[enterprise Integration Patterns](http://www.enterpriseintegrationpatterns.com/patterns/messaging/toc.html)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Micro services & Distributed Systems
+   - *Description*: Architecture patterns from Micro services & Distributed Systems catalog.
+142. **[martinfowler](https://martinfowler.com/articles/patterns-of-distributed-systems/)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Micro services & Distributed Systems
+   - *Description*: Architecture patterns from Micro services & Distributed Systems catalog.
+143. **[database tenancy patterns](https://docs.microsoft.com/en-us/azure/sql-database/saas-tenancy-app-design-patterns)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Databases and Storage
+   - *Description*: Architecture patterns from Databases and Storage catalog.
+144. **[databaseanswers](http://www.databaseanswers.org/data_models)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Databases and Storage
+   - *Description*: Architecture patterns from Databases and Storage catalog.
+145. **[database-programmer](http://database-programmer.blogspot.com/2008/01/table-design-patterns.html)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Databases and Storage
+   - *Description*: Architecture patterns from Databases and Storage catalog.
+146. **[red-gate](https://www.red-gate.com/simple-talk/sql/database-administration/five-simple-database-design-errors-you-should-avoid)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Databases and Storage
+   - *Description*: Architecture patterns from Databases and Storage catalog.
+147. **[talend](https://www.talend.com/blog/2017/05/05/data-model-design-best-practices-part-1)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Databases and Storage
+   - *Description*: Architecture patterns from Databases and Storage catalog.
+148. **[sqlcheck](https://github.com/jarulraj/sqlcheck)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Databases and Storage
+   - *Description*: Architecture patterns from Databases and Storage catalog.
+149. **[Data warehouse patterns](https://aws.amazon.com/blogs/big-data/etl-and-elt-design-patterns-for-lake-house-architecture-using-amazon-redshift-part-1/)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Databases and Storage
+   - *Description*: Architecture patterns from Databases and Storage catalog.
+150. **[nosql resilience patterns](https://www.ebayinc.com/stories/blogs/tech/practical-nosql-resilience-design-pattern-for-the-enterprise)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Databases and Storage
+   - *Description*: Architecture patterns from Databases and Storage catalog.
+151. **[nosql-patterns](https://dzone.com/articles/introduction-nosql-patterns)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Databases and Storage
+   - *Description*: Architecture patterns from Databases and Storage catalog.
+152. **[mongodb](https://dzone.com/articles/mongodb-design-patterns)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Databases and Storage
+   - *Description*: Architecture patterns from Databases and Storage catalog.
+153. **[MongoDB Applied Design Patterns](http://shop.oreilly.com/product/0636920027041.do)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Databases and Storage
+   - *Description*: Architecture patterns from Databases and Storage catalog.
+154. **[DynamoDB design patterns](https://amazon-dynamodb-labs.com/design-patterns.html)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Databases and Storage
+   - *Description*: Architecture patterns from Databases and Storage catalog.
+155. **[Redis applied design patterns](https://redislabs.com/redis-best-practices/introduction/)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Databases and Storage
+   - *Description*: Architecture patterns from Databases and Storage catalog.
+156. **[storage patterns](https://aws.amazon.com/blogs/storage/comparing-your-on-premises-storage-patterns-with-aws-storage-services/)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Databases and Storage
+   - *Description*: Architecture patterns from Databases and Storage catalog.
+157. **[S3 Design Patterns](https://d1.awsstatic.com/whitepapers/AmazonS3BestPractices.pdf)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Databases and Storage
+   - *Description*: Architecture patterns from Databases and Storage catalog.
+158. **[opensecurityarchitecture](http://www.opensecurityarchitecture.org/cms/library/patternlandscape)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Security
+   - *Description*: Architecture patterns from Security catalog.
+159. **[martinfowler](https://www.martinfowler.com/articles/web-security-basics.html)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Security
+   - *Description*: Architecture patterns from Security catalog.
+160. **[cloud-security](https://www.infoq.com/articles/cloud-security-architecture-intro)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Security
+   - *Description*: Architecture patterns from Security catalog.
+161. **[owasp](https://www.owasp.org/index.php/Security_by_Design_Principles)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Security
+   - *Description*: Architecture patterns from Security catalog.
+162. **[azure-security](https://docs.microsoft.com/en-us/azure/security/security-best-practices-and-patterns)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Security
+   - *Description*: Architecture patterns from Security catalog.
+163. **[Django Design Patterns and Best Practices](https://arunrocks.com/static/book/django-design-patterns-best-practices-2-ed)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Books
+   - *Description*: Architecture patterns from Books catalog.
+164. **[MongoDB Applied Design Patterns](http://shop.oreilly.com/product/0636920027041.do)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Books
+   - *Description*: Architecture patterns from Books catalog.
+165. **[Design-Patterns-Elements-Reusable-Object-Oriented](https://www.amazon.com/Design-Patterns-Elements-Reusable-Object-Oriented/dp/0201633612/ref=sr_1_4?s=books&ie=UTF8&qid=1528136036&sr=1-4&keywords=design+patterns)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Books
+   - *Description*: Architecture patterns from Books catalog.
+166. **[Head-First-Design-Patterns-Brain-Friendly](https://www.amazon.com/Head-First-Design-Patterns-Brain-Friendly/dp/0596007124/ref=pd_sim_14_4)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Books
+   - *Description*: Architecture patterns from Books catalog.
+167. **[Effective-Java-3rd-Joshua-Bloch](https://www.amazon.com/Effective-Java-3rd-Joshua-Bloch/dp/0134685997/ref=pd_sim_14_7)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Books
+   - *Description*: Architecture patterns from Books catalog.
+168. **[Node.js Design Patterns](https://www.packtpub.com/web-development/nodejs-design-patterns-second-edition)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Books
+   - *Description*: Architecture patterns from Books catalog.
+169. **[Game Programming Patterns](https://github.com/munificent/game-programming-patterns)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Books
+   - *Description*: Architecture patterns from Books catalog.
+170. **[Object Design Style Guide](https://www.manning.com/books/object-design-style-guide)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Books
+   - *Description*: Architecture patterns from Books catalog.
+171. **[Spring Boot in Practice](https://www.manning.com/books/spring-boot-in-practice)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Books
+   - *Description*: Architecture patterns from Books catalog.
+172. **[Designing Microservices](https://www.manning.com/books/designing-microservices)**
+   - *Authority*: Various
+   - *Topic*: Design Patterns - Books
+   - *Description*: Architecture patterns from Books catalog.
+
 ---
 title: Master EA Knowledge Index
 category: Knowledge
