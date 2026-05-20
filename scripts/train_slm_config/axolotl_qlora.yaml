@@ -1,4 +1,4 @@
-base_model: unsloth/Llama-3.2-3B-Instruct-bnb-4bit
+base_model: unsloth/Phi-3.5-mini-instruct-bnb-4bit
 model_type: AutoModelForCausalLM
 tokenizer_type: AutoTokenizer
 
@@ -9,7 +9,7 @@ strict: false
 datasets:
   - path: backend/data/synthetic_corpus.jsonl
     type: sharegpt
-    conversation: llama-3
+    conversation: phi-3
 
 dataset_prepared_path: last_run_prepared
 val_set_size: 0.05
@@ -75,4 +75,5 @@ weight_decay: 0.0
 fsdp:
 fsdp_config:
 special_tokens:
-  pad_token: "<|end_of_text|>"
+  pad_token: "<|endoftext|>"
+  eos_token: "<|endoftext|>"

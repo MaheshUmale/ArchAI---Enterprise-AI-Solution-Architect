@@ -105,13 +105,11 @@ ArchAI provides a complete pipeline for high-quality SLM distillation (Continued
    python3 scripts/ingest_master_sources.py --doc_dir "docs/EA_CLOUD_DESIGN PATTERNS/" --max_pages 20
    ```
 
-2. **Synthetic Corpus Generation**: Create high-quality ShareGPT-formatted dialogues using the ingested knowledge and a real teacher LLM (GPT-4o or Claude 3.5 Sonnet).
+2. **Synthetic Corpus Generation**: Create high-quality ShareGPT-formatted dialogues using the ingested knowledge and a real teacher LLM (Claude 3.5 Sonnet preferred).
    ```bash
-   # Generates 500-1000 high-quality samples with full ArchAI guidance injection
-   python3 scripts/generate_ea_corpus.py --total_count 500 --output backend/data/synthetic_corpus.jsonl
-
-   # For massive scale (2000-5000 examples), increase total_count and max_sources
-   python3 scripts/generate_ea_corpus.py --total_count 2000 --max_sources 200
+   # Generates 5000+ high-quality samples with full ArchAI guidance injection
+   # Recommended for production-grade SLM training
+   python3 scripts/generate_ea_corpus.py --total_count 5000 --max_sources 500 --output backend/data/synthetic_corpus.jsonl
    ```
 
 3. **Dataset Validation & Evaluation**: Ensure the generated corpus is ready for training and score its quality.
@@ -123,10 +121,12 @@ ArchAI provides a complete pipeline for high-quality SLM distillation (Continued
    python3 scripts/evaluate_slm.py --input backend/data/synthetic_corpus.jsonl
    ```
 
-4. **Training (Axolotl)**: Use the provided configuration for QLoRA fine-tuning.
+4. **Training (Axolotl + Unsloth)**: Use the provided configuration for QLoRA fine-tuning (Optimized for Phi-3.5 3.8B).
+   - **Hardware**: Single GPU with 24GB+ VRAM (RTX 3090/4090 or A10) recommended.
+   - **Guide**: See [TRAINING_GUIDE.md](./docs/TRAINING_GUIDE.md) for full details.
    ```bash
-   # Use Axolotl with the provided config
-   accelerate launch -m axolotl.cli.train scripts/train_slm_config/axolotl_qlora.yaml
+   # Launch optimized training
+   bash scripts/train_slm.sh
    ```
 
 3. **Download Local References**: Fetch external source content for offline reference.

@@ -27,8 +27,12 @@ if ! command -v accelerate &> /dev/null; then
     # pip install git+https://github.com/OpenAccess-AI-Collective/axolotl
 fi
 
-# 3. Launch Training
+# 3. Launch Training (Optimized for Unsloth + Axolotl)
 echo "🏋️ Launching training with Axolotl config: $CONFIG_PATH"
-# accelerate launch -m axolotl.cli.train "$CONFIG_PATH"
+echo "💡 Hardware tip: 24GB+ VRAM (RTX 3090/4090 or A10) recommended for Phi-3.5 4-bit QLoRA."
 
-echo "✅ Pipeline initiated (Launch command commented out in sandbox)."
+# Using Unsloth optimized loader via Axolotl
+# Note: Ensure you have unsloth installed: pip install "unsloth[colab-new] @ git+https://github.com/unslothai/unsloth.git"
+accelerate launch -m axolotl.cli.train "$CONFIG_PATH" --unsloth
+
+echo "✅ Training complete or process detached."
