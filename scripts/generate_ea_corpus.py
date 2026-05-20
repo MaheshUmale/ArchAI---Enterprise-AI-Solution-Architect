@@ -20,23 +20,18 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Attempt to load LLM from the app environment
+from dotenv import load_dotenv
+
+# Load environment variables from .env if it exists
+load_dotenv()
+load_dotenv(os.path.join(BACKEND_DIR, ".env"))
+
+# Import get_llm from backend app
 try:
     from app.agents.base_agent import get_llm
-except ImportError:
-    logger.warning("Backend dependencies not found. Using fallback mock LLM.")
-    def get_llm(temperature=0.7):
-        class MockLLM:
-            async def ainvoke(self, prompt):
-                class Resp:
-                    content = json.dumps([{
-                        "conversations": [
-                            {"from": "human", "value": "How should I design a multi-region data architecture on AWS?"},
-                            {"from": "gpt", "value": "According to the AWS Well-Architected Framework and DDIA principles, you should first consider the trade-offs between latency, cost, and consistency. ARCHAI:think-before-architecting suggests exploring active-active vs active-passive patterns... [Synthetic Response]"}
-                        ]
-                    }])
-                return Resp()
-        return MockLLM()
+except ImportError as e:
+    logger.error(f"Failed to import backend dependencies: {e}")
+    sys.exit(1)
 
 class EACorpusGenerator:
     """
@@ -46,6 +41,7 @@ class EACorpusGenerator:
     def __init__(self, output_file: str, batch_size: int = 5):
         self.output_file = output_file
         self.batch_size = batch_size
+        self.lock = asyncio.Lock()
         try:
             self.llm = get_llm(temperature=0.8)
         except Exception as e:
@@ -73,29 +69,50 @@ class EACorpusGenerator:
         guidance = self.load_guidance()
 
         turns_instruction = "Generate a multi-turn (3-4 turns) architectural dialogue." if multi_turn else "Generate a single-turn architectural dialogue."
-        skill_instruction = f"The dialogue MUST specifically showcase the ArchAI skill: {skill}." if skill else "The dialogue must demonstrate proper use of ArchAI skills (think-before-architecting, tradeoff-matrix, reuse-first)."
+
+        # Enhanced skill instruction
+        if skill:
+            skill_instruction = f"The dialogue MUST specifically showcase the ArchAI skill: {skill}."
+        else:
+            skill_instruction = """The dialogue must demonstrate proper use of multiple ArchAI skills:
+            - ARCHAI:think-before-architecting: Analyze the problem deeply before proposing solutions.
+            - ARCHAI:tradeoff-matrix: Explicitly compare options using a matrix (cost, complexity, performance, etc.).
+            - ARCHAI:reuse-first: Evaluate existing enterprise assets before building new ones."""
 
         prompt = f"""
-        You are the ArchAI Synthetic Data Engine.
-        Your task is to generate {num_examples} extremely high-quality, multi-turn architectural dialogues between a Human and ArchAI (the GPT assistant).
+        You are the ArchAI Synthetic Data Engine, a high-fidelity teacher model.
+        Your goal is to generate {num_examples} extremely high-quality, professional, and diverse architectural dialogues.
 
-        The dialogues must be in ShareGPT format.
-
-        --- REQUIREMENTS ---
-        1. ASSISTANT ROLE: ArchAI is an expert Enterprise Architect. It must be professional, evidence-based, and surgical.
-        2. SKILLS: {skill_instruction}
-        3. SOURCE GROUNDING: Base the technical advice on the provided context: {source_name}.
-        4. COMPLEXITY: Human should ask complex, multi-layered enterprise questions (e.g., legacy migration, global scale, data mesh).
-        5. MULTI-TURN: {turns_instruction} The Human should ask follow-up questions challenging the previous answer or asking for more detail.
-        6. FORMAT: Output ONLY a JSON list of objects. Each object has a "conversations" key.
-
-        --- ARCHAI GUIDANCE & SKILLS ---
+        --- ARCHAI PHILOSOPHY & GUARDRAILS (MANDATORY) ---
         {guidance}
 
-        --- CONTEXT CONTENT ({source_name}) ---
-        {context_content[:8000]}
+        --- TASK ---
+        Generate {num_examples} dialogue(s) in ShareGPT format between a 'human' and 'gpt' (ArchAI).
 
-        Output ONLY valid JSON.
+        --- TECHNICAL CONTEXT ({source_name}) ---
+        {context_content[:10000]}
+
+        --- QUALITY REQUIREMENTS ---
+        1. ASSISTANT IDENTITY: ArchAI is a surgical, evidence-based Enterprise Architect. Never be generic. Always cite patterns or principles from the context.
+        2. SKILLS: {skill_instruction}
+        3. COMPLEXITY: The 'human' represents a CTO or Lead Architect. Questions should be hard, involving legacy constraints, budget, and scale.
+        4. MULTI-TURN: {turns_instruction} Turns 2 and 3 should push back on the assistant's initial recommendation to force deeper reasoning.
+        5. GUARDRAILS: Strictly follow all ARCHAI-GUARDRAILS. No fluff. No excessive pleasantries.
+        6. OUTPUT FORMAT: Output ONLY a JSON list of objects. Each object must have a "conversations" key.
+
+        Example Format:
+        [
+          {{
+            "conversations": [
+              {{"from": "human", "value": "..."}},
+              {{"from": "gpt", "value": "..."}},
+              {{"from": "human", "value": "..."}},
+              {{"from": "gpt", "value": "..."}}
+            ]
+          }}
+        ]
+
+        Output ONLY valid raw JSON.
         """
 
         try:
@@ -112,9 +129,10 @@ class EACorpusGenerator:
                 data = [data]
 
             os.makedirs(os.path.dirname(self.output_file), exist_ok=True)
-            with open(self.output_file, "a", encoding="utf-8") as f:
-                for entry in data:
-                    f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+            async with self.lock:
+                with open(self.output_file, "a", encoding="utf-8") as f:
+                    for entry in data:
+                        f.write(json.dumps(entry, ensure_ascii=False) + "\n")
             logger.info(f"Appended {len(data)} examples from {source_name} to {self.output_file}")
         except Exception as e:
             logger.error(f"Failed to generate or parse response from {source_name}: {e}")
@@ -182,18 +200,27 @@ async def main():
         logger.error("No sources or documents found to generate from.")
         return
 
-    # Calculate examples per source to hit total_count
-    examples_per_source = max(1, args.total_count // len(all_work))
+    # Determine how many examples per prompt (keep it low for high quality)
+    EXAMPLES_PER_PROMPT = 2
 
-    logger.info(f"Generated a plan for {len(all_work)} sources, ~{examples_per_source} examples each.")
+    # We want total_count, so we need total_count // EXAMPLES_PER_PROMPT calls
+    needed_calls = (args.total_count + EXAMPLES_PER_PROMPT - 1) // EXAMPLES_PER_PROMPT
+
+    # Repeat or sample enough work items
+    final_work_plan = []
+    while len(final_work_plan) < needed_calls:
+        random.shuffle(all_work)
+        final_work_plan.extend(all_work[:needed_calls - len(final_work_plan)])
+
+    logger.info(f"Generated a plan for {len(final_work_plan)} LLM calls to hit target ~{args.total_count} examples.")
 
     # Process in batches to avoid overwhelming LLM or rate limits
-    batch_size = 5
-    for i in range(0, len(all_work), batch_size):
-        batch = all_work[i:i+batch_size]
-        tasks = [generator.generate_examples(content, name, examples_per_source, skill=args.skill) for content, name in batch]
+    batch_size = 3 # Smaller batch for more reliability
+    for i in range(0, len(final_work_plan), batch_size):
+        batch = final_work_plan[i:i+batch_size]
+        tasks = [generator.generate_examples(content, name, EXAMPLES_PER_PROMPT, skill=args.skill) for content, name in batch]
         await asyncio.gather(*tasks)
-        logger.info(f"Processed batch {i//batch_size + 1}/{(len(all_work)-1)//batch_size + 1}")
+        logger.info(f"Processed batch {i//batch_size + 1}/{(len(final_work_plan)-1)//batch_size + 1}")
 
 if __name__ == "__main__":
     asyncio.run(main())

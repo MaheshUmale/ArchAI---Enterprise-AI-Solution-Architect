@@ -105,9 +105,13 @@ ArchAI provides a complete pipeline for high-quality SLM distillation (Continued
    python3 scripts/ingest_master_sources.py --doc_dir "docs/EA_CLOUD_DESIGN PATTERNS/" --max_pages 20
    ```
 
-2. **Synthetic Corpus Generation**: Create high-quality ShareGPT-formatted dialogues using the ingested knowledge.
+2. **Synthetic Corpus Generation**: Create high-quality ShareGPT-formatted dialogues using the ingested knowledge and a real teacher LLM (GPT-4o or Claude 3.5 Sonnet).
    ```bash
+   # Generates 500-1000 high-quality samples with full ArchAI guidance injection
    python3 scripts/generate_ea_corpus.py --total_count 500 --output backend/data/synthetic_corpus.jsonl
+
+   # For massive scale (2000-5000 examples), increase total_count and max_sources
+   python3 scripts/generate_ea_corpus.py --total_count 2000 --max_sources 200
    ```
 
 3. **Dataset Validation & Evaluation**: Ensure the generated corpus is ready for training and score its quality.
