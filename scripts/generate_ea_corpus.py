@@ -5,6 +5,7 @@ import asyncio
 import logging
 import argparse
 import random
+import time
 from typing import List, Dict
 
 # Ensure backend directory is in sys.path for standalone execution
@@ -38,12 +39,14 @@ class EACorpusGenerator:
     Uses the master index + processed docs + guidance files to generate high-quality
     training data for SLM distillation in ShareGPT format.
     """
-    def __init__(self, output_file: str, batch_size: int = 5):
+    def __init__(self, output_file: str, model: str = None, batch_size: int = 5):
         self.output_file = output_file
         self.batch_size = batch_size
+        self.model = model
         self.lock = asyncio.Lock()
         try:
-            self.llm = get_llm(temperature=0.8)
+            self.llm = get_llm(temperature=0.8, model=self.model)
+            logger.info(f"Initialized LLM with model: {self.model or 'default'}")
         except Exception as e:
             logger.error(f"Failed to initialize LLM: {e}")
             sys.exit(1)
@@ -115,27 +118,34 @@ class EACorpusGenerator:
         Output ONLY valid raw JSON.
         """
 
-        try:
-            response = await self.llm.ainvoke(prompt)
-            # Clean the response content
-            clean_content = response.content.strip()
-            if clean_content.startswith("```json"):
-                clean_content = clean_content[7:-3].strip()
-            elif clean_content.startswith("```"):
-                clean_content = clean_content[3:-3].strip()
+        max_retries = 5
+        for attempt in range(max_retries):
+            try:
+                response = await self.llm.ainvoke(prompt)
+                # Clean the response content
+                clean_content = response.content.strip()
+                if clean_content.startswith("```json"):
+                    clean_content = clean_content[7:-3].strip()
+                elif clean_content.startswith("```"):
+                    clean_content = clean_content[3:-3].strip()
 
-            data = json.loads(clean_content)
-            if not isinstance(data, list):
-                data = [data]
+                data = json.loads(clean_content)
+                if not isinstance(data, list):
+                    data = [data]
 
-            os.makedirs(os.path.dirname(self.output_file), exist_ok=True)
-            async with self.lock:
-                with open(self.output_file, "a", encoding="utf-8") as f:
-                    for entry in data:
-                        f.write(json.dumps(entry, ensure_ascii=False) + "\n")
-            logger.info(f"Appended {len(data)} examples from {source_name} to {self.output_file}")
-        except Exception as e:
-            logger.error(f"Failed to generate or parse response from {source_name}: {e}")
+                os.makedirs(os.path.dirname(self.output_file), exist_ok=True)
+                async with self.lock:
+                    with open(self.output_file, "a", encoding="utf-8") as f:
+                        for entry in data:
+                            f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+                logger.info(f"Appended {len(data)} examples from {source_name} to {self.output_file}")
+                return # Success
+            except Exception as e:
+                wait_time = (2 ** attempt) + random.random()
+                logger.warning(f"Attempt {attempt+1} failed for {source_name}: {e}. Retrying in {wait_time:.2f}s...")
+                await asyncio.sleep(wait_time)
+
+        logger.error(f"Failed to generate after {max_retries} attempts for {source_name}")
 
 async def main():
     parser = argparse.ArgumentParser(description="ArchAI EA Corpus Generator for SLM Distillation")
@@ -143,13 +153,14 @@ async def main():
     parser.add_argument("--processed_docs", type=str, default="backend/data/processed_docs.json")
     parser.add_argument("--output", type=str, default="backend/data/synthetic_corpus.jsonl")
     parser.add_argument("--total_count", type=int, default=10, help="Total target number of examples")
-    parser.add_argument("--max_sources", type=int, default=50, help="Limit total sources processed for balancing")
+    parser.add_argument("--max_sources", type=int, default=100, help="Limit total sources processed for balancing")
     parser.add_argument("--skill", type=str, default=None, help="Focus generation on a specific ArchAI skill")
+    parser.add_argument("--model", type=str, default=os.getenv("TEACHER_MODEL"), help="Teacher model name")
     parser.add_argument("--append", action="store_true")
 
     args = parser.parse_args()
 
-    generator = EACorpusGenerator(args.output)
+    generator = EACorpusGenerator(args.output, model=args.model)
 
     if not args.append and os.path.exists(args.output):
         logger.info(f"Overwriting existing output file: {args.output}")
@@ -200,7 +211,7 @@ async def main():
         logger.error("No sources or documents found to generate from.")
         return
 
-    # Determine how many examples per prompt (keep it low for high quality)
+    # Determine how many examples per prompt
     EXAMPLES_PER_PROMPT = 2
 
     # We want total_count, so we need total_count // EXAMPLES_PER_PROMPT calls
@@ -215,12 +226,13 @@ async def main():
     logger.info(f"Generated a plan for {len(final_work_plan)} LLM calls to hit target ~{args.total_count} examples.")
 
     # Process in batches to avoid overwhelming LLM or rate limits
-    batch_size = 3 # Smaller batch for more reliability
+    batch_size = 2 # Small batch for Groq rate limits
     for i in range(0, len(final_work_plan), batch_size):
         batch = final_work_plan[i:i+batch_size]
         tasks = [generator.generate_examples(content, name, EXAMPLES_PER_PROMPT, skill=args.skill) for content, name in batch]
         await asyncio.gather(*tasks)
         logger.info(f"Processed batch {i//batch_size + 1}/{(len(final_work_plan)-1)//batch_size + 1}")
+        await asyncio.sleep(2) # Respectful delay between batches
 
 if __name__ == "__main__":
     asyncio.run(main())

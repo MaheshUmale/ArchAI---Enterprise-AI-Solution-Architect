@@ -94,7 +94,7 @@ class MasterSourceParser:
 
 class DocumentProcessor:
     """
-    Processes PDF and EPUB files with advanced cleaning, chunking, and deduplication.
+    Processes PDF, EPUB, and Markdown files with advanced cleaning, chunking, and deduplication.
     """
     def __init__(self, directory: str, max_pages: int = 50, chunk_size: int = 4000, chunk_overlap: int = 400, use_unstructured: bool = True):
         self.directory = directory
@@ -195,6 +195,23 @@ class DocumentProcessor:
             logger.error(f"Error processing PDF with pdfplumber {filepath}: {e}")
         return text
 
+    def process_markdown(self, filepath: str) -> Dict[str, Any]:
+        text = ""
+        try:
+            with open(filepath, "r", encoding="utf-8") as f:
+                text = f.read()
+        except Exception as e:
+            logger.error(f"Error processing Markdown {filepath}: {e}")
+
+        cleaned_text = self.clean_text(text)
+        chunks = self.chunk_text(cleaned_text)
+
+        return {
+            "title": os.path.basename(filepath),
+            "author": "Unknown",
+            "chunks": chunks
+        }
+
     def process_epub(self, filepath: str) -> Dict[str, Any]:
         text = ""
         title = os.path.basename(filepath)
@@ -234,16 +251,22 @@ class DocumentProcessor:
             logger.warning(f"Directory not found: {self.directory}")
             return []
 
-        files = [f for f in os.listdir(self.directory) if f.lower().endswith(('.pdf', '.epub'))]
+        files = [f for f in os.listdir(self.directory) if f.lower().endswith(('.pdf', '.epub', '.md'))]
         logger.info(f"Processing {len(files)} docs from {self.directory} (Chunking enabled, Use Unstructured: {self.use_unstructured})...")
 
         for filename in tqdm(files, desc="Processing Docs"):
             filepath = os.path.join(self.directory, filename)
             result = None
+            file_type = "unknown"
             if filename.lower().endswith('.pdf'):
                 result = self.process_pdf(filepath)
+                file_type = "pdf"
             elif filename.lower().endswith('.epub'):
                 result = self.process_epub(filepath)
+                file_type = "epub"
+            elif filename.lower().endswith('.md'):
+                result = self.process_markdown(filepath)
+                file_type = "markdown"
 
             if result and result["chunks"]:
                 self.processed_docs.append({
@@ -252,7 +275,7 @@ class DocumentProcessor:
                     "author": result["author"],
                     "chunks": result["chunks"],
                     "source_type": "local_document",
-                    "file_type": "pdf" if filename.lower().endswith('.pdf') else "epub"
+                    "file_type": file_type
                 })
 
         return self.processed_docs

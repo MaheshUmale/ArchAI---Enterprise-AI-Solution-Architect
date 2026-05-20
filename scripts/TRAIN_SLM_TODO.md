@@ -21,6 +21,9 @@ This document outlines the pending tasks and future enhancements for the ArchAI 
 - [ ] **DVC Integration**: Manage large artifacts without Git.
 
 ## ✅ Completed
+- [x] **Design Patterns Ingestion**: Integrated 56 new sources from `Architectural Design Patterns.md`.
+- [x] **Multi-Provider LLM Support**: Native support for Groq and Gemini in distillation pipeline.
+- [x] **High-Volume Scaling**: Established automated supervisor for corpus expansion (220+ samples generated).
 - [x] PDF/EPUB extraction support (pdfplumber/ebooklib).
 - [x] ShareGPT format conversion.
 - [x] Master EA Index ingestion.

@@ -43,7 +43,7 @@ postgres_data/
 .idea/
 
 # ArchAI Data Artifacts
-backend/data/*.json
-backend/data/*.jsonl
+# backend/data/*.json
+# backend/data/*.jsonl
 ingestion.log
 logs/
