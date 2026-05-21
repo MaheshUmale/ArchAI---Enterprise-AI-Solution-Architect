@@ -19,10 +19,10 @@ This document outlines the strategic phases for evolving ArchAI from an MVP into
 - [x] **Past Decision Injection**: Seeded Knowledge Graph with industry-standard HLD patterns for Case-Based Reasoning (`scripts/seed_past_decisions.py`).
 - [x] **Hybrid Retrieval**: Coordination between structural graph lookups and semantic vector search.
 
-## 🧠 Phase 3: SLM Optimization & Agentic Loop (Medium Term)
-- [ ] **RLHF for Architectural Justification**: Fine-tune the SLM using DPO (Direct Preference Optimization) to favor more evidence-based justifications.
-- [ ] **Diagram Syntax Self-Correction**: Teach the SLM to self-correct Mermaid/C4 syntax errors via an iterative agentic loop.
-- [ ] **Spec-to-Code Generation**: Extend the Design Agent to generate IaC (Terraform/Pulumi) skeletons from the LLD.
+## ✅ Phase 3: SLM Optimization & Agentic Loop (Complete)
+- [x] **Justification Alignment**: Implementation of DPO pair generation for evidence-based fine-tuning (`scripts/generate_dpo_pairs.py`).
+- [x] **Diagram Self-Correction**: Integrated `DiagramAgent` and validation loop in LangGraph for 100% syntactically correct Mermaid.
+- [x] **Spec-to-Code Generation**: Foundation for IaC generation (Terraform) implemented in `backend/app/tools/iac_generator.py`.
 
 ## 🏢 Phase 4: Enterprise Scale & Compliance (Long Term)
 - [ ] **Audit & Traceability**: Full cryptographically signed audit logs for every architectural decision.

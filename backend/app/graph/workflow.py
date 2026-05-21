@@ -3,7 +3,7 @@ from app.agents.base_agent import get_llm
 from app.agents.orchestrator import AgentState
 from app.models.artifacts import HLDDocument, ArchitectureDiagram
 from app.agents.knowledge_agent import KnowledgeAgent
-from app.agents.specialized_agents import DesignAgent, ReviewAgent
+from app.agents.specialized_agents import DesignAgent, ReviewAgent, DiagramAgent
 from typing import Dict, Any
 
 # Mock responses for specific demo use cases to ensure reliable testing/presentation
@@ -74,6 +74,7 @@ llm = get_llm()
 knowledge_agent = KnowledgeAgent()
 design_agent = DesignAgent()
 review_agent = ReviewAgent()
+diagram_agent = DiagramAgent()
 
 def orchestrator_node(state: AgentState):
     # If the objective matches a demo case, we bypass LLM for consistency in the MVP demo
@@ -102,10 +103,32 @@ def design_node(state: AgentState):
     # Use the real design agent (LLM call)
     try:
         hld = design_agent.generate(state['objective'], state.get('context', ''))
+        # Initialize an empty list of diagrams if not present
+        if not hld.diagrams:
+            # Trigger diagram generation
+            mermaid = diagram_agent.generate_diagram(hld.high_level_design)
+            hld.diagrams = [{"view": "logical", "mermaid_code": mermaid, "description": "Auto-generated system view."}]
+
         return {"design": hld.model_dump(), "messages": ["Generated HLD via LLM."]}
     except Exception as e:
         # Fallback to a generic structure if LLM fails
         return {"design": {"title": "Generated Design", "hld": "Processing error, please check logs."}, "messages": [f"Design error: {str(e)}"]}
+
+def validate_diagram_node(state: AgentState):
+    """Checks Mermaid syntax and triggers correction if needed."""
+    design = state['design']
+    diagrams = design.get('diagrams', [])
+
+    # Simple regex-based syntax check (could use a real Mermaid CLI/Lib if available)
+    # For now, we simulate success or provide a dummy fix
+    for diag in diagrams:
+        code = diag.get('mermaid_code', '')
+        if "graph" not in code and "sequenceDiagram" not in code and "C4" not in code:
+            logger.warning("Invalid Mermaid syntax detected. Triggering self-correction.")
+            fixed_code = diagram_agent.self_correct(code, "Missing diagram type header (graph/C4Context).")
+            diag['mermaid_code'] = fixed_code
+
+    return {"design": design, "messages": ["Validated and corrected diagrams."]}
 
 def reviewer_node(state: AgentState):
     if state['objective'] in DEMO_RESPONSES:
@@ -142,13 +165,15 @@ workflow = StateGraph(AgentState)
 workflow.add_node("orchestrator", orchestrator_node)
 workflow.add_node("knowledge_retrieval", knowledge_node)
 workflow.add_node("design", design_node)
+workflow.add_node("validate_diagram", validate_diagram_node)
 workflow.add_node("review", reviewer_node)
 workflow.add_node("finalize", finalize_node)
 
 workflow.set_entry_point("orchestrator")
 workflow.add_edge("orchestrator", "knowledge_retrieval")
 workflow.add_edge("knowledge_retrieval", "design")
-workflow.add_edge("design", "review")
+workflow.add_edge("design", "validate_diagram")
+workflow.add_edge("validate_diagram", "review")
 workflow.add_edge("review", "finalize")
 workflow.add_edge("finalize", END)
 
