@@ -16,11 +16,14 @@ This document outlines the pending tasks and future enhancements for the ArchAI 
 
 ## 🚀 Low Priority (Tooling & UX)
 - [x] **Axolotl Wrapper Script**: `scripts/train_slm.sh` to automate validation and training launch.
-- [x] **Evaluation Framework**: Skeleton `scripts/evaluate_slm.py` using LLM-as-a-Judge.
-- [ ] **Inference Sandbox**: Gradio/Streamlit UI for offline testing.
+- [x] **Evaluation Framework**: `scripts/evaluate_slm.py` updated with comparative benchmarking.
+- [ ] **Inference Sandbox**: Gradio UI for local vs teacher comparison.
 - [ ] **DVC Integration**: Manage large artifacts without Git.
 
 ## ✅ Completed
+- [x] **Zero-Cost Distillation Pipeline**: Native support for SambaNova, Together AI, and Local models.
+- [x] **Local Data Validation**: Diversity filtering, boilerplate removal, and tokenization pre-checks.
+- [x] **Cloud Training Assets**: Standalone notebook and optimized Axolotl configs for free GPU tiers.
 - [x] **Design Patterns Ingestion**: Integrated 56 new sources from `Architectural Design Patterns.md`.
 - [x] **Multi-Provider LLM Support**: Native support for Groq and Gemini in distillation pipeline.
 - [x] **High-Volume Scaling**: Established automated supervisor for corpus expansion (220+ samples generated).
