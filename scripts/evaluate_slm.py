@@ -36,10 +36,11 @@ except ImportError:
 
 class SLMEvaluator:
     """
-    Evaluates synthetic architectural dialogues for quality, grounding, and skill adherence.
+    Evaluates architectural models for quality, grounding, and skill adherence.
     """
-    def __init__(self):
-        self.judge_llm = get_llm(temperature=0.0)
+    def __init__(self, judge_model=None):
+        # The judge should always be a highly capable model
+        self.judge_llm = get_llm(temperature=0.0, model=judge_model)
 
     def calculate_diversity(self, samples: List[Dict]) -> float:
         """Calculates a simple diversity score based on unique vocabulary in responses."""
@@ -53,6 +54,52 @@ class SLMEvaluator:
         if not words: return 0.0
         unique_words = set(words)
         return len(unique_words) / len(words)
+
+    async def compare_and_benchmark(self, objective: str, context: str, student_response: str, teacher_response: str) -> Dict:
+        """Uses LLM-as-a-judge to compare student vs teacher responses."""
+
+        prompt = f"""
+        You are a Senior Enterprise Architect Judge. Compare the following two architectural designs for the same objective.
+
+        OBJECTIVE: {objective}
+        CONTEXT: {context[:2000]}
+
+        STUDENT DESIGN (Small Model):
+        {student_response}
+
+        TEACHER DESIGN (Large Model):
+        {teacher_response}
+
+        CRITERIA:
+        1. **Technical Accuracy**: Does the student match the teacher's technical depth?
+        2. **ArchAI Philosophy**: Does it "Think Architecturally First"?
+        3. **Skill Adherence**: Proper use of trade-off matrices or C4 diagrams.
+        4. **Hallucination Check**: Does the student invent tools or patterns not in the context?
+
+        Output your evaluation in JSON format with:
+        - student_score (1-10)
+        - teacher_score (1-10)
+        - alignment_percentage (how closely student follows teacher logic)
+        - specific_gaps (list of missing technical details in student)
+        - strengths (where student matched or exceeded teacher)
+        - win_tie_loss (from student perspective)
+        """
+
+        try:
+            result = await self.judge_llm.ainvoke(prompt)
+            content = self._clean_json_response(result.content)
+            return json.loads(content)
+        except Exception as e:
+            logger.error(f"Benchmarking failed: {e}")
+            return {"error": str(e)}
+
+    def _clean_json_response(self, content: str) -> str:
+        content = content.strip()
+        if "```json" in content:
+            content = content.split("```json")[1].split("```")[0].strip()
+        elif "```" in content:
+            content = content.split("```")[1].split("```")[0].strip()
+        return content
 
     async def evaluate_dialogue(self, conversations: List[Dict]) -> Dict:
         """Uses LLM-as-a-judge to score a single dialogue."""
@@ -108,13 +155,70 @@ class SLMEvaluator:
             logger.error(f"Evaluation failed: {e}")
             return {}
 
+async def run_comparative_benchmark(evaluator, input_file, num_samples):
+    """Runs a live comparison benchmark between Local SLM and Teacher."""
+    samples = []
+    with open(input_file, "r", encoding="utf-8") as f:
+        for line in f:
+            samples.append(json.loads(line))
+
+    benchmark_samples = random.sample(samples, min(len(samples), num_samples))
+    results = []
+
+    # Providers
+    os.environ["USE_LOCAL_LLM"] = "false"
+    teacher_llm = get_llm(temperature=0.0)
+    os.environ["USE_LOCAL_LLM"] = "true"
+    student_llm = get_llm(temperature=0.0)
+
+    for i, sample in enumerate(benchmark_samples):
+        # Extract first human turn as objective
+        objective = sample['conversations'][0]['value']
+        logger.info(f"[{i+1}/{num_samples}] Benchmarking objective: {objective[:50]}...")
+
+        # In a real scenario, we'd fetch context from RAG
+        context = "ArchAI Enterprise Architecture Context."
+
+        # Get responses
+        t_resp = await teacher_llm.ainvoke(objective)
+        s_resp = await student_llm.ainvoke(objective)
+
+        # Judge
+        judge_report = await evaluator.compare_and_benchmark(objective, context, s_resp.content, t_resp.content)
+        results.append({
+            "objective": objective,
+            "judge_report": judge_report
+        })
+
+    return results
+
 async def main():
     parser = argparse.ArgumentParser(description="ArchAI SLM Synthetic Data Evaluator")
     parser.add_argument("--input", type=str, default="backend/data/synthetic_corpus.jsonl", help="Path to synthetic corpus JSONL")
     parser.add_argument("--output", type=str, default="backend/data/evaluation_report.json", help="Path to save report")
     parser.add_argument("--sample_size", type=int, default=10, help="Number of samples to evaluate")
+    parser.add_argument("--benchmark", action="store_true", help="Run comparative benchmark between Student and Teacher")
+    parser.add_argument("--judge_model", type=str, default=None, help="LLM to use as judge")
 
     args = parser.parse_args()
+
+    evaluator = SLMEvaluator(judge_model=args.judge_model)
+
+    if args.benchmark:
+        logger.info("Starting Comparative Benchmark...")
+        benchmark_results = await run_comparative_benchmark(evaluator, args.input, args.sample_size)
+
+        with open(args.output.replace(".json", "_benchmark.json"), "w", encoding="utf-8") as f:
+            json.dump(benchmark_results, f, indent=2)
+
+        avg_student = sum(r['judge_report'].get('student_score', 0) for r in benchmark_results) / len(benchmark_results)
+        avg_teacher = sum(r['judge_report'].get('teacher_score', 0) for r in benchmark_results) / len(benchmark_results)
+
+        print(f"\n--- Comparative Benchmark Results ---")
+        print(f"Avg Student Score: {avg_student:.2f}/10")
+        print(f"Avg Teacher Score: {avg_teacher:.2f}/10")
+        print(f"Relative Performance: {(avg_student/avg_teacher)*100:.1f}%")
+        return
 
     if not os.path.exists(args.input):
         logger.error(f"Input file {args.input} not found.")

@@ -6,3 +6,4 @@ numpy
 datasets
 nbformat
 ipykernel
+gradio
