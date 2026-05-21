@@ -55,6 +55,20 @@ HLD_REPOSITORIES = [
         "name": "vivek-panchal/System-Design-LLD-HLD",
         "url": "https://github.com/vivek-panchal/System-Design-LLD-HLD",
         "key_resources": ["2. HLD-System-Design"]
+    },
+    {
+        "name": "armankhondker/best-system-design-resources",
+        "url": "https://github.com/armankhondker/best-system-design-resources",
+        "key_resources": [
+            "Latency vs Throughput", "CAP Theorom", "SQL vs NoSQL",
+            "Consistency Patterns", "Fault Tolerance", "API Design",
+            "Top Tech Engineering Blogs: OpenAI, Stripe, Instagram, Netflix"
+        ]
+    },
+    {
+        "name": "TuShArBhArDwA/System-Design",
+        "url": "https://github.com/TuShArBhArDwA/System-Design",
+        "key_resources": ["Caching", "Load Balancing", "Microservices", "Interview Prep"]
     }
 ]
 
@@ -110,6 +124,26 @@ async def main():
                 "name": "Distributed Locking with etcd/Zookeeper",
                 "source": "HLD-System-Designs",
                 "description": "Ensuring mutually exclusive access to shared resources in a distributed cluster."
+            },
+            {
+                "name": "Design WhatsApp (Messaging System)",
+                "source": "Best System Design Resources",
+                "description": "High-concurrency messaging with WebSocket, end-to-end encryption, and multi-device sync."
+            },
+            {
+                "name": "Design Netflix (Video Streaming)",
+                "source": "Awesome System Design Resources",
+                "description": "Microservices architecture for video transcoding, CDN integration, and recommendation engines."
+            },
+            {
+                "name": "Design Uber (Ride-Sharing)",
+                "source": "System Design Primer",
+                "description": "Geospatial indexing (S2/H3), real-time location tracking, and high-availability marketplace matching."
+            },
+            {
+                "name": "Sharding & Consistency at Instagram",
+                "source": "Best System Design Resources",
+                "description": "Techniques for horizontally scaling relational databases while maintaining global ordering."
             }
         ]
     }

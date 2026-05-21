@@ -13,10 +13,11 @@ This document outlines the strategic phases for evolving ArchAI from an MVP into
     - Unsloth-optimized 4-bit QLoRA training for Phi-3.5.
     - Comparative Evaluation & KG Grounding checks.
 
-## 🚀 Phase 2: Graph-RAG Deepening (Short Term)
-- [ ] **Dynamic Ontology Mapping**: Automate the creation of Neo4j nodes from unstructured PDF content.
-- [ ] **Cross-Entity Reasoning**: Enhance the Knowledge Agent to perform multi-hop graph queries (e.g., "Find all systems using License X that feed into Policy Y").
-- [ ] **Past Decision Injection**: Seed the Knowledge Graph with historical HLDs to enable "Case-Based Reasoning".
+## ✅ Phase 2: Graph-RAG Deepening (Complete)
+- [x] **Dynamic Ontology Mapping**: LLM-based extraction of Neo4j nodes from unstructured content (`scripts/extract_entities.py`).
+- [x] **Dynamic Cypher Reasoning**: Knowledge Agent powered by NL-to-Cypher generation for multi-hop graph queries.
+- [x] **Past Decision Injection**: Seeded Knowledge Graph with industry-standard HLD patterns for Case-Based Reasoning (`scripts/seed_past_decisions.py`).
+- [x] **Hybrid Retrieval**: Coordination between structural graph lookups and semantic vector search.
 
 ## 🧠 Phase 3: SLM Optimization & Agentic Loop (Medium Term)
 - [ ] **RLHF for Architectural Justification**: Fine-tune the SLM using DPO (Direct Preference Optimization) to favor more evidence-based justifications.

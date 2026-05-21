@@ -1,0 +1,136 @@
+{
+  "repositories": [
+    {
+      "name": "Anshul619/HLD-System-Designs",
+      "url": "https://github.com/Anshul619/HLD-System-Designs",
+      "key_resources": [
+        "0_UseCaseDesigns",
+        "1_Databases",
+        "2_MessageBrokersEDA",
+        "3_MicroServices",
+        "4_Scalability",
+        "5_HighAvailability",
+        "7_ArchitecturePatterns",
+        "8_API-Protocols"
+      ]
+    },
+    {
+      "name": "ashishps1/awesome-system-design-resources",
+      "url": "https://github.com/ashishps1/awesome-system-design-resources",
+      "key_resources": [
+        "Scalability",
+        "Availability",
+        "Reliability",
+        "Consistent Hashing",
+        "CAP Theorem",
+        "Load Balancing",
+        "API Gateway",
+        "NoSQL",
+        "Distributed Caching",
+        "Pub/Sub",
+        "Service Discovery"
+      ]
+    },
+    {
+      "name": "donnemartin/system-design-primer",
+      "url": "https://github.com/donnemartin/system-design-primer",
+      "key_resources": [
+        "Scale from 1 to 11 million users",
+        "Case studies: Twitter, Mint, Pastebin"
+      ]
+    },
+    {
+      "name": "vivek-panchal/System-Design-LLD-HLD",
+      "url": "https://github.com/vivek-panchal/System-Design-LLD-HLD",
+      "key_resources": [
+        "2. HLD-System-Design"
+      ]
+    },
+    {
+      "name": "armankhondker/best-system-design-resources",
+      "url": "https://github.com/armankhondker/best-system-design-resources",
+      "key_resources": [
+        "Latency vs Throughput",
+        "CAP Theorom",
+        "SQL vs NoSQL",
+        "Consistency Patterns",
+        "Fault Tolerance",
+        "API Design",
+        "Top Tech Engineering Blogs: OpenAI, Stripe, Instagram, Netflix"
+      ]
+    },
+    {
+      "name": "TuShArBhArDwA/System-Design",
+      "url": "https://github.com/TuShArBhArDwA/System-Design",
+      "key_resources": [
+        "Caching",
+        "Load Balancing",
+        "Microservices",
+        "Interview Prep"
+      ]
+    }
+  ],
+  "templates": [
+    "https://github.com/ARMmbed/mbed-os/blob/master/docs/design-documents/design_template.md",
+    "https://www.docuwriter.ai/posts/sample-software-design-document",
+    "https://www.ucl.ac.uk/isd/sites/isd/files/migrated-files/HLD_template_v3.docx",
+    "https://docs.google.com/document/d/1pgMutdDasJb6eN6yK6M95JM8gQ16IKacxxhPXgeL9WY/edit"
+  ],
+  "core_elements": [
+    "System Architecture Diagram",
+    "Component Breakdown",
+    "Data Flow Diagrams (DFD)",
+    "Technology Stack",
+    "Non-Functional Requirements",
+    "Scalability Plan",
+    "Security & Compliance",
+    "Cost Estimation"
+  ],
+  "curated_patterns": [
+    {
+      "name": "Microservices with API Gateway",
+      "source": "System Design Primer",
+      "description": "Standard pattern for scalable backends with centralized auth and routing."
+    },
+    {
+      "name": "Event-Sourcing and CQRS",
+      "source": "HLD-System-Designs",
+      "description": "Separating read and write models with an immutable event log."
+    },
+    {
+      "name": "Multi-Region Active-Active High Availability",
+      "source": "HLD-System-Designs",
+      "description": "Deploying services across multiple geographic regions with real-time replication."
+    },
+    {
+      "name": "Content Delivery Network (CDN) with Edge Side Includes",
+      "source": "Awesome System Design Resources",
+      "description": "Offloading static and dynamic content delivery to the edge for low latency."
+    },
+    {
+      "name": "Distributed Locking with etcd/Zookeeper",
+      "source": "HLD-System-Designs",
+      "description": "Ensuring mutually exclusive access to shared resources in a distributed cluster."
+    },
+    {
+      "name": "Design WhatsApp (Messaging System)",
+      "source": "Best System Design Resources",
+      "description": "High-concurrency messaging with WebSocket, end-to-end encryption, and multi-device sync."
+    },
+    {
+      "name": "Design Netflix (Video Streaming)",
+      "source": "Awesome System Design Resources",
+      "description": "Microservices architecture for video transcoding, CDN integration, and recommendation engines."
+    },
+    {
+      "name": "Design Uber (Ride-Sharing)",
+      "source": "System Design Primer",
+      "description": "Geospatial indexing (S2/H3), real-time location tracking, and high-availability marketplace matching."
+    },
+    {
+      "name": "Sharding & Consistency at Instagram",
+      "source": "Best System Design Resources",
+      "description": "Techniques for horizontally scaling relational databases while maintaining global ordering."
+    }
+  ]
+}
