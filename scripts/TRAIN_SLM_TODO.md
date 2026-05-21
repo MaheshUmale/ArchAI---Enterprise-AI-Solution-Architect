@@ -16,8 +16,8 @@ This document outlines the pending tasks and future enhancements for the ArchAI 
 
 ## 🚀 Low Priority (Tooling & UX)
 - [x] **Axolotl Wrapper Script**: `scripts/train_slm.sh` to automate validation and training launch.
-- [x] **Evaluation Framework**: `scripts/evaluate_slm.py` updated with comparative benchmarking.
-- [ ] **Inference Sandbox**: Gradio UI for local vs teacher comparison.
+- [x] **Evaluation Framework**: `scripts/evaluate_slm.py` updated with comparative benchmarking and KG grounding.
+- [x] **Inference Sandbox**: Gradio UI for local vs teacher comparison (`scripts/inference_sandbox.py`).
 - [ ] **DVC Integration**: Manage large artifacts without Git.
 
 ## ✅ Completed
