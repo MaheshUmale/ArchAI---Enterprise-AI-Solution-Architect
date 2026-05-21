@@ -2,14 +2,16 @@
 
 This document outlines the strategic phases for evolving ArchAI from an MVP into a production-grade Enterprise AI Architect.
 
-## ✅ Phase 1: Knowledge Foundation & Distillation (Current)
+## ✅ Phase 1: Knowledge Foundation & Distillation (Complete)
 - [x] **Master EA Index**: Indexed 115+ authoritative sources.
 - [x] **Pattern Ingestion**: Automated processing of cloud design patterns.
 - [x] **Multi-Agent Core**: Established LangGraph orchestration.
+- [x] **Graph Schema Deepening**: Support for Licenses, Owners, Policies, and Decisions.
 - [x] **SLM Distillation Ecosystem**:
     - Zero-cost generation using Groq/SambaNova.
     - Local data validation (Diversity, Boilerplate, Tokenization).
     - Unsloth-optimized 4-bit QLoRA training for Phi-3.5.
+    - Comparative Evaluation & KG Grounding checks.
 
 ## 🚀 Phase 2: Graph-RAG Deepening (Short Term)
 - [ ] **Dynamic Ontology Mapping**: Automate the creation of Neo4j nodes from unstructured PDF content.

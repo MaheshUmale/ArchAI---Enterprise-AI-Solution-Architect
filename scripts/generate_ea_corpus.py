@@ -163,6 +163,7 @@ async def main():
     parser.add_argument("--output", type=str, default="backend/data/synthetic_corpus.jsonl")
     parser.add_argument("--total_count", type=int, default=10, help="Total target number of examples")
     parser.add_argument("--max_sources", type=int, default=100, help="Limit total sources processed for balancing")
+    parser.add_argument("--past_decisions", type=str, default=None, help="Path to past decisions JSON for Case-Based Reasoning")
     parser.add_argument("--skill", type=str, default=None, help="Focus generation on a specific ArchAI skill")
     parser.add_argument("--model", type=str, default=os.getenv("TEACHER_MODEL"), help="Teacher model name")
     parser.add_argument("--append", action="store_true")
@@ -198,7 +199,7 @@ async def main():
                     content = f"Title: {src['title']}\nTopic: {src['topic']}\nDescription: {src['description']}"
                     all_work.append((content, src['title']))
                     processed_count += 1
-                    if processed_count >= args.max_sources // 2: break
+                if processed_count >= args.max_sources // 3: break
                 topics = [t for t in topics if by_topic[t]]
 
     # Balanced Sampling: Large Docs (Chunks)
@@ -209,11 +210,23 @@ async def main():
             processed_count = 0
 
             for doc in docs:
-                if processed_count >= args.max_sources // 2: break
+                if processed_count >= args.max_sources // 3: break
                 chunks = doc.get('chunks', [])
                 if not chunks: continue
                 chunk = random.choice(chunks)
                 all_work.append((chunk, doc['title']))
+                processed_count += 1
+
+    # Case-Based Reasoning: Past Decisions
+    if args.past_decisions and os.path.exists(args.past_decisions):
+        with open(args.past_decisions, "r", encoding="utf-8") as f:
+            decisions = json.load(f)
+            random.shuffle(decisions)
+            processed_count = 0
+            for d in decisions:
+                if processed_count >= args.max_sources // 3: break
+                content = f"PAST ARCHITECTURAL DECISION\nTitle: {d['title']}\nContext: {d['context']}\nDecision: {d['decision']}\nJustification: {d['justification']}"
+                all_work.append((content, f"Past Decision: {d['title']}"))
                 processed_count += 1
 
     if not all_work:

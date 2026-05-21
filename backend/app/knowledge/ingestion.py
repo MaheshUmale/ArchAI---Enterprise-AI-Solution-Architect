@@ -39,6 +39,46 @@ class KnowledgeIngestion:
                     SET r.protocol = $protocol, r.frequency = $frequency
                 """, **feed)
 
+            # Owners
+            for owner in data.get("owners", []):
+                session.run("""
+                    MERGE (o:Owner {id: $id})
+                    SET o.name = $name, o.department = $department
+                """, **owner)
+                if "system_id" in owner:
+                    session.run("""
+                        MATCH (s:System {id: $system_id})
+                        MATCH (o:Owner {id: $id})
+                        MERGE (s)-[:OWNED_BY]->(o)
+                    """, **owner)
+
+            # Licenses
+            for license in data.get("licenses", []):
+                session.run("""
+                    MERGE (l:License {id: $id})
+                    SET l.name = $name, l.cost = $cost, l.renewal_date = $renewal_date
+                """, **license)
+                if "system_id" in license:
+                    session.run("""
+                        MATCH (s:System {id: $system_id})
+                        MATCH (l:License {id: $id})
+                        MERGE (s)-[:HAS_LICENSE]->(l)
+                    """, **license)
+
+            # Policies
+            for policy in data.get("policies", []):
+                session.run("""
+                    MERGE (p:Policy {id: $id})
+                    SET p.name = $name, p.description = $description, p.severity = $severity
+                """, **policy)
+
+            # Past Decisions
+            for decision in data.get("past_decisions", []):
+                session.run("""
+                    MERGE (d:PastDecision {id: $id})
+                    SET d.title = $title, d.context = $context, d.decision = $decision, d.justification = $justification
+                """, **decision)
+
     def ingest_excel(self, file_path: str, sheet_name: str, entity_type: str):
         df = pd.read_excel(file_path, sheet_name=sheet_name)
         data = df.to_dict(orient='records')

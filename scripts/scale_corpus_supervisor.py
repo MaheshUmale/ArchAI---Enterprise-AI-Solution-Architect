@@ -5,16 +5,24 @@ import time
 import json
 
 async def run_gen(total_count, model, output_file):
+    """
+    Runs the generator script. Note: The generator itself now has robust backoff,
+    but we still manage batches at the supervisor level for high-volume targets.
+    """
     cmd = [
         "python3", "scripts/generate_ea_corpus.py",
         "--total_count", str(total_count),
-        "--max_sources", "50",
+        "--max_sources", "100",
         "--output", output_file,
-        "--model", model,
         "--append"
     ]
+    if model:
+        cmd.extend(["--model", model])
+
     env = os.environ.copy()
-    env["DATABASE_URL"] = "postgresql://user:pass@localhost:5432/db"
+    # Ensure backend is in PYTHONPATH
+    backend_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "backend")
+    env["PYTHONPATH"] = env.get("PYTHONPATH", "") + ":" + backend_path
 
     process = await asyncio.create_subprocess_exec(
         *cmd,
@@ -26,41 +34,47 @@ async def run_gen(total_count, model, output_file):
     return process.returncode, stdout.decode(), stderr.decode()
 
 async def main():
-    target = 800
+    target = 1000
     current_count = 0
     output_file = "backend/data/synthetic_corpus.jsonl"
-    model = "llama-3.1-8b-instant" # Higher TPM usually
+    # Leaving model empty uses the base_agent priority (Groq -> SambaNova -> Together)
+    model = None
 
     while True:
         # Check current count
         try:
-            with open(output_file, 'r') as f:
-                current_count = len(f.readlines())
-        except:
+            if os.path.exists(output_file):
+                with open(output_file, 'r', encoding='utf-8') as f:
+                    current_count = len(f.readlines())
+            else:
+                current_count = 0
+        except Exception as e:
+            print(f"Count check error: {e}")
             current_count = 0
 
-        print(f"Current count: {current_count}/{target}")
+        print(f"--- ArchAI Scaling Supervisor ---")
+        print(f"Progress: {current_count}/{target}")
+
         if current_count >= target:
-            print("Target reached!")
+            print("Target reached! Finalizing Phase 1 Synthetic Generation.")
             break
 
-        print(f"Running generation batch for {model}...")
-        # Try to generate 20 at a time
-        rc, out, err = await run_gen(20, model, output_file)
+        batch_size = 50
+        print(f"Launching batch of ~{batch_size} samples...")
 
-        if "rate_limit_exceeded" in out or "rate_limit_exceeded" in err:
-            print("Rate limit hit. Sleeping for 60 seconds...")
-            await asyncio.sleep(60)
-        elif "RESOURCE_EXHAUSTED" in out or "RESOURCE_EXHAUSTED" in err:
-            print("Daily quota probably hit. Sleeping for 300 seconds...")
-            await asyncio.sleep(300)
-        elif rc != 0:
-            print(f"Error occurred (rc={rc}). Sleeping for 30 seconds...")
-            print(err)
-            await asyncio.sleep(30)
+        rc, out, err = await run_gen(batch_size, model, output_file)
+
+        if rc != 0:
+            print(f"Batch completed with errors (rc={rc}). See logs/scaling.log for details.")
+            if "429" in out or "429" in err or "rate_limit" in out.lower() or "rate_limit" in err.lower():
+                print("Provider Rate Limit hit. Supervisor sleeping for 5 minutes...")
+                await asyncio.sleep(300)
+            else:
+                print("General error. Sleeping for 30 seconds...")
+                await asyncio.sleep(30)
         else:
-            print("Batch completed successfully. Sleeping for 10 seconds...")
-            await asyncio.sleep(10)
+            print(f"Batch completed successfully. Sleeping for 15 seconds to be respectful.")
+            await asyncio.sleep(15)
 
 if __name__ == "__main__":
     asyncio.run(main())
