@@ -1,0 +1,8 @@
+torch
+sentence-transformers
+transformers
+scikit-learn
+numpy
+datasets
+nbformat
+ipykernel

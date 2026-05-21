@@ -10,6 +10,8 @@ class Settings(BaseSettings):
     GOOGLE_API_KEY: str | None = None
     ANTHROPIC_API_KEY: str | None = None
     CLAUDE_API_KEY: str | None = None  # Alias for ANTHROPIC_API_KEY
+    SAMBANOVA_API_KEY: str | None = None
+    TOGETHER_API_KEY: str | None = None
     DATABASE_URL: str | None = None
 
     class Config:
