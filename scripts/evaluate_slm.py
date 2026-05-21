@@ -3,9 +3,9 @@ import sys
 import json
 import asyncio
 import logging
+import random
 import argparse
 import re
-import random
 from typing import List, Dict
 
 # Ensure backend directory is in sys.path for standalone execution
@@ -58,10 +58,16 @@ class SLMEvaluator:
     async def compare_and_benchmark(self, objective: str, context: str, student_response: str, teacher_response: str) -> Dict:
         """Uses LLM-as-a-judge to compare student vs teacher responses."""
 
+        # Check for KG Grounding (Entities from Neo4j Schema)
+        kg_entities = ["System", "DataAsset", "Owner", "License", "Policy", "PastDecision"]
+        found_entities = [e for e in kg_entities if e.lower() in student_response.lower()]
+        grounding_context = f"Detected KG Entities: {', '.join(found_entities)}" if found_entities else "No KG Entities detected."
+
         prompt = f"""
         You are a Senior Enterprise Architect Judge. Compare the following two architectural designs for the same objective.
 
         OBJECTIVE: {objective}
+        KNOWLEDGE GRAPH CONTEXT: {grounding_context}
         CONTEXT: {context[:2000]}
 
         STUDENT DESIGN (Small Model):
