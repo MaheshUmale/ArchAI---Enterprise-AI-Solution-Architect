@@ -118,7 +118,7 @@ class EACorpusGenerator:
         Output ONLY valid raw JSON.
         """
 
-        max_retries = 5
+        max_retries = 8
         for attempt in range(max_retries):
             try:
                 response = await self.llm.ainvoke(prompt)
@@ -129,6 +129,7 @@ class EACorpusGenerator:
                 elif clean_content.startswith("```"):
                     clean_content = clean_content[3:-3].strip()
 
+                # Basic validation that it's JSON
                 data = json.loads(clean_content)
                 if not isinstance(data, list):
                     data = [data]
@@ -141,8 +142,15 @@ class EACorpusGenerator:
                 logger.info(f"Appended {len(data)} examples from {source_name} to {self.output_file}")
                 return # Success
             except Exception as e:
-                wait_time = (2 ** attempt) + random.random()
-                logger.warning(f"Attempt {attempt+1} failed for {source_name}: {e}. Retrying in {wait_time:.2f}s...")
+                # Detect rate limit errors and apply heavier backoff
+                error_str = str(e).lower()
+                if "rate_limit" in error_str or "429" in error_str:
+                    wait_time = (5 ** (attempt + 1)) + random.uniform(5, 15)
+                    logger.warning(f"Rate limit hit for {source_name}. Backing off for {wait_time:.2f}s...")
+                else:
+                    wait_time = (2 ** attempt) + random.uniform(1, 5)
+                    logger.warning(f"Attempt {attempt+1} failed for {source_name}: {e}. Retrying in {wait_time:.2f}s...")
+
                 await asyncio.sleep(wait_time)
 
         logger.error(f"Failed to generate after {max_retries} attempts for {source_name}")

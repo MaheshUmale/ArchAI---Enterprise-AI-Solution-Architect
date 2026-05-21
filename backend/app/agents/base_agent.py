@@ -7,11 +7,15 @@ from app.core.config import settings
 def get_llm(temperature=0.0, model=None):
     """
     Returns an LLM instance based on available environment variables.
-    Priority: Groq > Gemini > Anthropic > OpenAI
+    Priority: Groq > SambaNova > Together > Gemini > Anthropic > OpenAI
     """
     if model is None:
         if settings.GROQ_API_KEY:
             model = "llama-3.3-70b-versatile"
+        elif settings.SAMBANOVA_API_KEY:
+            model = "Meta-Llama-3.1-405B-Instruct"
+        elif settings.TOGETHER_API_KEY:
+            model = "meta-llama/Meta-Llama-3.1-405B-Instruct-Turbo"
         elif settings.GOOGLE_API_KEY:
             model = "gemini-2.0-flash"
         elif settings.ANTHROPIC_API_KEY or settings.CLAUDE_API_KEY:
@@ -22,6 +26,23 @@ def get_llm(temperature=0.0, model=None):
             raise ValueError("No LLM API keys found in environment")
 
     if "llama" in model.lower() or "mixtral" in model.lower() or "gemma" in model.lower():
+        # Check if it's SambaNova or Together via API key availability if model name is ambiguous
+        # but usually we can check provider-specific prefix or use model name.
+        if settings.SAMBANOVA_API_KEY and ("Samba" in model or model.startswith("Meta-Llama-3.1-405B")):
+             return ChatOpenAI(
+                model=model,
+                temperature=temperature,
+                api_key=settings.SAMBANOVA_API_KEY,
+                base_url="https://api.sambanova.ai/v1"
+            )
+        elif settings.TOGETHER_API_KEY and ("together" in model.lower() or "meta-llama/Meta-Llama-3.1-405B" in model):
+            return ChatOpenAI(
+                model=model,
+                temperature=temperature,
+                api_key=settings.TOGETHER_API_KEY,
+                base_url="https://api.together.xyz/v1"
+            )
+
         return ChatGroq(
             model=model,
             temperature=temperature,
