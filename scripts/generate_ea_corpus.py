@@ -145,7 +145,8 @@ class EACorpusGenerator:
                 # Detect rate limit errors and apply heavier backoff
                 error_str = str(e).lower()
                 if "rate_limit" in error_str or "429" in error_str:
-                    wait_time = (5 ** (attempt + 1)) + random.uniform(5, 15)
+                    # Exponential backoff with base 2 and jitter, starting at ~10s
+                    wait_time = (2 ** (attempt + 3)) + random.uniform(5, 15)
                     logger.warning(f"Rate limit hit for {source_name}. Backing off for {wait_time:.2f}s...")
                 else:
                     wait_time = (2 ** attempt) + random.uniform(1, 5)
