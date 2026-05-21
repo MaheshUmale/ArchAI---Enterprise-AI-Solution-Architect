@@ -107,35 +107,38 @@ ArchAI is built for Small Language Model (SLM) distillation (3B-7B parameters) u
 - [**Guardrails**](./docs/guardrails/ARCHAI-GUARDRAILS.md): Non-negotiable safety and quality rules.
 
 ### 🛠 SLM Distillation Pipeline
-ArchAI provides a complete pipeline for high-quality SLM distillation (Continued Pre-training & QLoRA):
+ArchAI provides a complete pipeline for high-quality SLM distillation (Continued Pre-training & QLoRA), optimized for cost-control and performance:
 
 1. **Knowledge Ingestion**: Process the master index and local PDFs/EPUBs into structured text.
    ```bash
    # Install processing deps: pip install pdfplumber ebooklib beautifulsoup4 tqdm
-   python3 scripts/ingest_master_sources.py --doc_dir "docs/EA_CLOUD_DESIGN PATTERNS/" --max_pages 20
+   python3 scripts/ingest_master_sources.py --doc_dir "docs/EA_CLOUD_DESIGN_PATTERNS/" --max_pages 20
    ```
 
-2. **Synthetic Corpus Generation**: Create high-quality ShareGPT-formatted dialogues using the ingested knowledge and a real teacher LLM (Claude 3.5 Sonnet preferred).
+2. **Synthetic Corpus Generation**: Create high-quality ShareGPT-formatted dialogues using free-tier providers (Groq, SambaNova, Together AI).
    ```bash
-   # Generates 5000+ high-quality samples with full ArchAI guidance injection
-   # Recommended for production-grade SLM training
-   python3 scripts/generate_ea_corpus.py --total_count 5000 --max_sources 500 --output backend/data/synthetic_corpus.jsonl
+   # Generates high-quality samples with full ArchAI guidance injection
+   # Robust exponential backoff handles rate-limits automatically.
+   python3 scripts/generate_ea_corpus.py --total_count 1000 --output backend/data/synthetic_corpus.jsonl
    ```
 
-3. **Dataset Validation & Evaluation**: Ensure the generated corpus is ready for training and score its quality.
+3. **Zero-Cost Validation & Evaluation**: Optimize and validate your dataset locally (no API cost).
    ```bash
-   # Validate format and Mermaid syntax
-   python3 scripts/train_slm_config/validate_dataset.py backend/data/synthetic_corpus.jsonl
+   # Filter semantic duplicates and redundant dialogues
+   python3 scripts/filter_diversity.py
 
-   # Evaluate quality (LLM-as-a-judge)
-   python3 scripts/evaluate_slm.py --input backend/data/synthetic_corpus.jsonl
+   # Remove LLM phrasing traps and clean boilerplate
+   python3 scripts/clean_boilerplate.py
+
+   # Local tokenization and multi-turn sequence pre-check
+   python3 scripts/precheck_tokenization.py
    ```
 
-4. **Training (Axolotl + Unsloth)**: Use the provided configuration for QLoRA fine-tuning (Optimized for Phi-3.5 3.8B).
-   - **Hardware**: Single GPU with 24GB+ VRAM (RTX 3090/4090 or A10) recommended.
-   - **Guide**: See [TRAINING_GUIDE.md](./docs/TRAINING_GUIDE.md) for full details.
+4. **Training (Axolotl + Unsloth)**: Use the optimized [phi35-qlora.yml](./configs/phi35-qlora.yml) for memory-efficient 4-bit QLoRA.
+   - **Cloud Training**: Use the [Zero-Cost Training Notebook](./scripts/train_phi35_unsloth.ipynb) on Google Colab (T4) or Kaggle (Dual T4).
+   - **Local Training**: Requires 16GB+ VRAM.
    ```bash
-   # Launch optimized training
+   # Launch training with local validation pre-check
    bash scripts/train_slm.sh
    ```
 

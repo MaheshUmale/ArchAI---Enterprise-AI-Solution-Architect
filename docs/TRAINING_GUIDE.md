@@ -18,7 +18,13 @@ The core of our distillation. We use the multi-turn dialogues in `synthetic_corp
 
 We use **Axolotl + Unsloth** for 4-bit Quantized LoRA (QLoRA) to significantly reduce VRAM requirements while maintaining performance.
 
-### 3. Quantization & Export
+### 3. Zero-Cost / Local Validation
+To minimize training noise and API costs, we move data prep and evaluation to local scripts:
+- **`scripts/filter_diversity.py`**: Uses embedding-based cosine similarity to remove redundant dialogues.
+- **`scripts/clean_boilerplate.py`**: Prunes systemic LLM artifacts and "phrasing traps".
+- **`scripts/precheck_tokenization.py`**: Validates format and sequence length locally before touching expensive compute.
+
+### 4. Quantization & Export
 Post-training, the model is merged and quantized into **GGUF** (for local CPU/GPU execution) or **EXL2** (for high-throughput inference) formats.
 
 ## 🛠 Setup & Execution
@@ -28,12 +34,16 @@ Post-training, the model is merged and quantized into **GGUF** (for local CPU/GP
 - **Environment**: CUDA 12.x and PyTorch 2.x.
 
 ### Training Steps
-1. **Prepare Data**: Ensure `backend/data/synthetic_corpus.jsonl` is populated.
-2. **Validate**: Run `python3 scripts/train_slm_config/validate_dataset.py` to check for format issues.
-3. **Launch**:
+1. **Generate Data**: Run `scripts/generate_ea_corpus.py` using fallback providers (SambaNova/Together) to build your raw corpus.
+2. **Clean & Validate**: Run the local validation pipeline:
    ```bash
-   bash scripts/train_slm.sh
+   python3 scripts/filter_diversity.py
+   python3 scripts/clean_boilerplate.py
+   python3 scripts/precheck_tokenization.py
    ```
+3. **Launch (Local/Cloud)**:
+   - For Cloud: Upload `synthetic_corpus_cleaned.json` to [scripts/train_phi35_unsloth.ipynb](scripts/train_phi35_unsloth.ipynb).
+   - For Local: Run `bash scripts/train_slm.sh` (Requires 16GB+ VRAM).
 
 ## 📊 Evaluation
 After training, evaluate the model's performance using `scripts/evaluate_slm.py` to compare its responses against the teacher model's standards.
