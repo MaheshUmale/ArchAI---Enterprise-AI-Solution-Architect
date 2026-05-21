@@ -28,3 +28,8 @@ This document outlines the strategic phases for evolving ArchAI from an MVP into
 - [x] **Audit & Traceability**: Cryptographically signed SHA-256 audit logs for architectural decisions.
 - [x] **Multi-Tenant EA Layers**: Departmental scoping for Knowledge Graph queries and context.
 - [x] **SLM Portability**: Optimized training pipeline for local and cloud-hybrid execution.
+
+## 🎨 Phase 5: Enterprise Portal & Visualization (Future)
+- [ ] **Interactive Mermaid Rendering**: Native browser rendering of system architecture diagrams.
+- [ ] **IaC Workbench**: Direct export and preview of generated Terraform skeletons.
+- [ ] **Collaboration Engine**: Multi-user design reviews and threading on HLD artifacts.
