@@ -51,6 +51,8 @@ def precheck_tokenization(input_path: str, model_id: str, max_seq_length: int):
     too_long = 0
     format_errors = 0
     total_tokens = 0
+    unescaped_chars = 0
+    broken_sequences = 0
 
     for idx, entry in enumerate(dialogues):
         convos = entry.get('conversations', [])
@@ -59,12 +61,28 @@ def precheck_tokenization(input_path: str, model_id: str, max_seq_length: int):
             format_errors += 1
             continue
 
+        # Multi-turn sequence check (should ideally start with human and alternate)
+        if len(convos) < 2:
+            logger.warning(f"Sample {idx} is not multi-turn (only {len(convos)} turns).")
+            broken_sequences += 1
+
         # Basic ShareGPT format check
-        for turn in convos:
+        for turn_idx, turn in enumerate(convos):
             if 'from' not in turn or 'value' not in turn:
-                logger.warning(f"Sample {idx} has invalid turn format: {turn}")
+                logger.warning(f"Sample {idx} turn {turn_idx} has invalid format: {turn}")
                 format_errors += 1
-                break
+                continue
+
+            val = turn['value']
+            if not val or val.strip() == "":
+                logger.warning(f"Sample {idx} turn {turn_idx} has empty content.")
+                format_errors += 1
+
+            # Check for common unescaped character issues that might break JSON/tokenization
+            # Specifically looking for control characters or broken unicode
+            if any(ord(c) < 32 and c not in '\n\r\t' for c in val):
+                 logger.warning(f"Sample {idx} turn {turn_idx} contains unescaped control characters.")
+                 unescaped_chars += 1
 
         # Phi-3 Chat Template (simulated if template not available, but ideally use tokenizer.apply_chat_template)
         try:
@@ -96,9 +114,11 @@ def precheck_tokenization(input_path: str, model_id: str, max_seq_length: int):
     logger.info(f"Avg Tokens/Sample: {total_tokens/len(dialogues) if dialogues else 0:.2f}")
     logger.info(f"Samples exceeding {max_seq_length}: {too_long} ({(too_long/len(dialogues))*100 if dialogues else 0:.2f}%)")
     logger.info(f"Format Errors: {format_errors}")
+    logger.info(f"Broken Multi-turn Sequences: {broken_sequences}")
+    logger.info(f"Unescaped Control Characters: {unescaped_chars}")
 
-    if too_long > 0 or format_errors > 0:
-        logger.warning("Action suggested: Trim long dialogues or fix format errors before training.")
+    if too_long > 0 or format_errors > 0 or broken_sequences > 0 or unescaped_chars > 0:
+        logger.warning("Action suggested: Trim long dialogues or fix format/sequence errors before training.")
     else:
         logger.info("Dataset passed tokenization pre-check!")
 

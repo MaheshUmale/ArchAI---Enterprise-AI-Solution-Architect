@@ -1,0 +1,40 @@
+base_model: microsoft/Phi-3.5-mini-instruct
+trust_remote_code: true
+model_type: AutoModelForCausalLM
+tokenizer_type: AutoTokenizer
+
+# Quantization to squeeze memory footprint below 8GB VRAM
+load_in_4bit: true
+adapter: qlora
+
+# Connect to your local data path
+datasets:
+  - path: backend/data/synthetic_corpus_optimized.json
+    type: sharegpt
+    conversation: phi-3.5
+
+dataset_prepared_path: data/prepared_archai_slm
+val_set_size: 0.05
+output_dir: ./outputs/archai-phi3.5-mini
+
+# Architecture Context Engineering
+sequence_len: 4096
+sample_packing: true # Packs multiple short dialogues into one 4096 block to maximize throughput
+
+# LoRA Adaption parameters targeting all linear projections for deep domain adaptation
+lora_r: 16
+lora_alpha: 32
+lora_dropout: 0.05
+lora_target_linear: true
+
+# Training Stability hyperparameters
+gradient_accumulation_steps: 4
+micro_batch_size: 2
+num_epochs: 3
+optimizer: adamw_8bit
+lr_scheduler_type: cosine
+learning_rate: 0.0002
+
+train_on_inputs: false # Trains the SLM to predict the Assistant's architectural designs, ignoring user questions
+gradient_checkpointing: true
+flash_attention: true

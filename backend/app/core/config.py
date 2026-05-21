@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     CLAUDE_API_KEY: str | None = None  # Alias for ANTHROPIC_API_KEY
     SAMBANOVA_API_KEY: str | None = None
     TOGETHER_API_KEY: str | None = None
+    LOCAL_LLM_URL: str = "http://localhost:11434/v1"  # Default to local Ollama
     DATABASE_URL: str | None = None
 
     class Config:
