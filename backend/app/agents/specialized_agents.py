@@ -23,7 +23,7 @@ class DesignAgent:
         self.skills = ArchAISkills()
 
     def generate(self, objective: str, context: str) -> HLDDocument:
-        system_prompt = f"{self.base_prompt}\n\nRole Specific: You are the Design Agent. Generate structured HLD with C4/Mermaid diagrams."
+        system_prompt = f"{self.base_prompt}\n\nRole Specific: You are the Design Agent. Generate structured HLD with technical descriptions. Do not worry about diagram syntax; a specialized agent will handle that."
         prompt = ChatPromptTemplate.from_messages([
             ("system", system_prompt),
             ("user", "Objective: {objective}\n\nContext: {context}")
@@ -31,6 +31,38 @@ class DesignAgent:
 
         chain = prompt | self.llm | self.parser
         return chain.invoke({"objective": objective, "context": context})
+
+class DiagramAgent:
+    def __init__(self):
+        self.llm = get_llm(temperature=0.0)
+
+    def generate_diagram(self, design_text: str) -> str:
+        prompt = f"""
+        You are a Mermaid JS and C4 Model Expert.
+        Based on the following design description, generate a valid Mermaid graph (Flowchart or C4Context).
+
+        DESIGN:
+        {design_text}
+
+        Output ONLY the Mermaid code. Ensure syntax is 100% correct.
+        """
+        response = self.llm.invoke(prompt)
+        return response.content.strip()
+
+    def self_correct(self, diagram_code: str, error_message: str) -> str:
+        prompt = f"""
+        The following Mermaid code has a syntax error. Fix it.
+
+        CODE:
+        {diagram_code}
+
+        ERROR:
+        {error_message}
+
+        Output ONLY the fixed Mermaid code.
+        """
+        response = self.llm.invoke(prompt)
+        return response.content.strip()
 
 class ReviewAgent:
     def __init__(self):

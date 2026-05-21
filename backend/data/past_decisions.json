@@ -1,0 +1,112 @@
+[
+  {
+    "id": "dec-1000",
+    "title": "Scaling Event-Sourcing and CQRS",
+    "context": "Need to implement Event-Sourcing and CQRS for global scale.",
+    "decision": "Adopted Event-Sourcing and CQRS from HLD-System-Designs.",
+    "justification": "Matches enterprise requirements for Separating read and write models with an immutable event log.",
+    "tags": [
+      "scaling",
+      "infrastructure"
+    ]
+  },
+  {
+    "id": "dec-1001",
+    "title": "Scaling Microservices with API Gateway",
+    "context": "Need to implement Microservices with API Gateway for global scale.",
+    "decision": "Adopted Microservices with API Gateway from System Design Primer.",
+    "justification": "Matches enterprise requirements for Standard pattern for scalable backends with centralized auth and routing.",
+    "tags": [
+      "scaling",
+      "infrastructure"
+    ]
+  },
+  {
+    "id": "dec-1002",
+    "title": "Scaling Event-Sourcing and CQRS",
+    "context": "Need to implement Event-Sourcing and CQRS for global scale.",
+    "decision": "Adopted Event-Sourcing and CQRS from HLD-System-Designs.",
+    "justification": "Matches enterprise requirements for Separating read and write models with an immutable event log.",
+    "tags": [
+      "scaling",
+      "infrastructure"
+    ]
+  },
+  {
+    "id": "dec-1003",
+    "title": "Scaling Design Uber (Ride-Sharing)",
+    "context": "Need to implement Design Uber (Ride-Sharing) for global scale.",
+    "decision": "Adopted Design Uber (Ride-Sharing) from System Design Primer.",
+    "justification": "Matches enterprise requirements for Geospatial indexing (S2/H3), real-time location tracking, and high-availability marketplace matching.",
+    "tags": [
+      "scaling",
+      "infrastructure"
+    ]
+  },
+  {
+    "id": "dec-1004",
+    "title": "Scaling Sharding & Consistency at Instagram",
+    "context": "Need to implement Sharding & Consistency at Instagram for global scale.",
+    "decision": "Adopted Sharding & Consistency at Instagram from Best System Design Resources.",
+    "justification": "Matches enterprise requirements for Techniques for horizontally scaling relational databases while maintaining global ordering.",
+    "tags": [
+      "scaling",
+      "infrastructure"
+    ]
+  },
+  {
+    "id": "dec-1005",
+    "title": "Scaling Design Uber (Ride-Sharing)",
+    "context": "Need to implement Design Uber (Ride-Sharing) for global scale.",
+    "decision": "Adopted Design Uber (Ride-Sharing) from System Design Primer.",
+    "justification": "Matches enterprise requirements for Geospatial indexing (S2/H3), real-time location tracking, and high-availability marketplace matching.",
+    "tags": [
+      "scaling",
+      "infrastructure"
+    ]
+  },
+  {
+    "id": "dec-1006",
+    "title": "Scaling Sharding & Consistency at Instagram",
+    "context": "Need to implement Sharding & Consistency at Instagram for global scale.",
+    "decision": "Adopted Sharding & Consistency at Instagram from Best System Design Resources.",
+    "justification": "Matches enterprise requirements for Techniques for horizontally scaling relational databases while maintaining global ordering.",
+    "tags": [
+      "scaling",
+      "infrastructure"
+    ]
+  },
+  {
+    "id": "dec-1007",
+    "title": "Scaling Design WhatsApp (Messaging System)",
+    "context": "Need to implement Design WhatsApp (Messaging System) for global scale.",
+    "decision": "Adopted Design WhatsApp (Messaging System) from Best System Design Resources.",
+    "justification": "Matches enterprise requirements for High-concurrency messaging with WebSocket, end-to-end encryption, and multi-device sync.",
+    "tags": [
+      "scaling",
+      "infrastructure"
+    ]
+  },
+  {
+    "id": "dec-1008",
+    "title": "Scaling Event-Sourcing and CQRS",
+    "context": "Need to implement Event-Sourcing and CQRS for global scale.",
+    "decision": "Adopted Event-Sourcing and CQRS from HLD-System-Designs.",
+    "justification": "Matches enterprise requirements for Separating read and write models with an immutable event log.",
+    "tags": [
+      "scaling",
+      "infrastructure"
+    ]
+  },
+  {
+    "id": "dec-1009",
+    "title": "Scaling Sharding & Consistency at Instagram",
+    "context": "Need to implement Sharding & Consistency at Instagram for global scale.",
+    "decision": "Adopted Sharding & Consistency at Instagram from Best System Design Resources.",
+    "justification": "Matches enterprise requirements for Techniques for horizontally scaling relational databases while maintaining global ordering.",
+    "tags": [
+      "scaling",
+      "infrastructure"
+    ]
+  }
+]

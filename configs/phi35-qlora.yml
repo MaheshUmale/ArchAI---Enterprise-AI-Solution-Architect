@@ -9,7 +9,7 @@ adapter: qlora
 
 # Connect to your local data path
 datasets:
-  - path: backend/data/synthetic_corpus_optimized.json
+  - path: backend/data/synthetic_corpus_cleaned.json
     type: sharegpt
     conversation: phi-3.5
 
