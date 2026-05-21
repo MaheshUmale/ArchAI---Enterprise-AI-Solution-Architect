@@ -7,9 +7,19 @@ from app.core.config import settings
 def get_llm(temperature=0.0, model=None):
     """
     Returns an LLM instance based on available environment variables.
-    Priority: Groq > SambaNova > Together > Gemini > Anthropic > OpenAI
+    Priority: Local > Groq > SambaNova > Together > Gemini > Anthropic > OpenAI
     """
     if model is None:
+        # Check for local model first if enabled/specified via env
+        if os.getenv("USE_LOCAL_LLM") == "true":
+            model = os.getenv("LOCAL_MODEL_NAME", "phi3.5")
+            return ChatOpenAI(
+                model=model,
+                temperature=temperature,
+                api_key="local-placeholder",
+                base_url=settings.LOCAL_LLM_URL
+            )
+
         if settings.GROQ_API_KEY:
             model = "llama-3.3-70b-versatile"
         elif settings.SAMBANOVA_API_KEY:
